@@ -65,4 +65,9 @@ public interface PersonService {
      * Разблокировать пользователя
      */
     Person unblock(Person person);
+
+    /**
+     * Смена роли пользователя
+     */
+    Person changeRole(Person person);
 }

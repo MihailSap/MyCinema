@@ -23,4 +23,9 @@ public interface AuthService {
      * Получение авторизованного пользователя
      */
     Person getAuthenticatedPerson();
+
+    /**
+     * Обновление данных аутентифицированного пользователя
+     */
+    void refreshAuthentication(Person person);
 }

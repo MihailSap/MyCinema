@@ -1,5 +1,8 @@
 package ru.project.myCinema.dto;
 
+import ru.project.myCinema.model.PersonAccountStatus;
+import ru.project.myCinema.model.Role;
+
 /**
  * Данные пользователя для передачи клиенту
  */
@@ -8,6 +11,8 @@ public record PersonResponse(
         String login,
         String name,
         String surname,
-        Double balance
+        Double balance,
+        PersonAccountStatus accountStatus,
+        Role role
 ) {
 }

@@ -6,6 +6,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.security.UserDetailsImpl;
@@ -19,10 +21,15 @@ import ru.project.myCinema.service.AuthService;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager) {
+    public AuthServiceImpl(
+            AuthenticationManager authenticationManager,
+            UserDetailsService userDetailsService
+    ) {
         this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -36,6 +43,15 @@ public class AuthServiceImpl implements AuthService {
     public void logout(HttpSession session){
         session.invalidate();
         SecurityContextHolder.clearContext();
+    }
+
+    @Override
+    public void refreshAuthentication(Person person) {
+        UserDetails userDetails =
+                userDetailsService.loadUserByUsername(person.getLogin());
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
     @Override

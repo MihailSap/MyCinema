@@ -2,6 +2,7 @@ package ru.project.myCinema.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.PersonResponse;
@@ -49,6 +50,7 @@ public class PersonController {
     /**
      * Получение данных всех существующих пользователей
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<PersonResponse> getAllPersons() {
         List<Person> persons = personService.getAll();
@@ -98,6 +100,7 @@ public class PersonController {
     /**
      * Блокировка пользователя по id
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{personId}/block")
     public PersonResponse block(@PathVariable("personId") Long personId){
         Person person = personService.getById(personId);
@@ -111,6 +114,7 @@ public class PersonController {
     /**
      * Разблокировка пользователя по id
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{personId}/unblock")
     public PersonResponse unblock(@PathVariable("personId") Long personId){
         Person person = personService.getById(personId);
@@ -119,5 +123,16 @@ public class PersonController {
         }
         Person updatedPerson = personService.unblock(person);
         return personMapper.mapToPersonResponse(updatedPerson);
+    }
+
+    /**
+     * Обновление роли пользователя
+     */
+    @PatchMapping("/me/role")
+    public PersonResponse changeRole(){
+        Person person = authService.getAuthenticatedPerson();
+        Person updatePerson = personService.changeRole(person);
+        authService.refreshAuthentication(updatePerson);
+        return personMapper.mapToPersonResponse(updatePerson);
     }
 }

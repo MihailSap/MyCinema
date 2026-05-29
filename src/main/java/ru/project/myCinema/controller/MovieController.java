@@ -2,6 +2,7 @@ package ru.project.myCinema.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.MovieRequest;
@@ -52,6 +53,7 @@ public class MovieController {
     /**
      * Создание нового фильма
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public MovieResponse create(@RequestBody MovieRequest movieRequest){
@@ -62,6 +64,7 @@ public class MovieController {
     /**
      * Редактирование существующего фильма по id
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{movieId}")
     public MovieResponse update(
             @PathVariable("movieId") Long movieId,
@@ -75,6 +78,7 @@ public class MovieController {
     /**
      * Удаление фильма по id
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{movieId}")
     public DefaultResponse delete(@PathVariable("movieId") Long movieId){
         Movie movie = movieService.getById(movieId);

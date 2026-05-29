@@ -1,6 +1,7 @@
 package ru.project.myCinema.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.SeatResponse;
@@ -115,6 +116,7 @@ public class SessionController {
     /**
      * Создание сеанса
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public SessionResponse create(@RequestBody SessionRequest sessionRequest){
         Hall hall = hallService.getById(sessionRequest.hallId());
@@ -126,6 +128,7 @@ public class SessionController {
     /**
      * Редактирование данных сеанса
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{sessionId}")
     public SessionResponse update(
             @PathVariable("sessionId") Long sessionId,
@@ -139,6 +142,7 @@ public class SessionController {
     /**
      * Смена зала, в котором будет проходить сеанс
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{sessionId}/hall")
     public SessionResponse updateHall(
             @PathVariable("sessionId") Long sessionId,
@@ -153,6 +157,7 @@ public class SessionController {
     /**
      * Смена фильма, который будет показан на сеансе
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{sessionId}/movie")
     public SessionResponse updateMovie(
             @PathVariable("sessionId") Long sessionId,
@@ -167,6 +172,7 @@ public class SessionController {
     /**
      * Удаление сеанса
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{sessionId}")
     public DefaultResponse delete(@PathVariable("sessionId") Long sessionId){
         Session session = sessionService.getById(sessionId);

@@ -37,8 +37,17 @@ public class Person extends BaseEntity{
      */
     private Double balance;
 
+    /**
+     * Статус аккаунта
+     */
     @Enumerated(EnumType.STRING)
     private PersonAccountStatus accountStatus;
+
+    /**
+     * Роль
+     */
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     /**
      * Заказы
@@ -100,5 +109,13 @@ public class Person extends BaseEntity{
 
     public void setAccountStatus(PersonAccountStatus accountStatus) {
         this.accountStatus = accountStatus;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-add-role-to-person
+      author: SapeginMihail
+      changes:
+        - addColumn:
+            tableName: person
+            columns:
+              - column:
+                  name: role
+                  type: VARCHAR(10)

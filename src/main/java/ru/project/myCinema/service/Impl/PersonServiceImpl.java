@@ -8,6 +8,7 @@ import ru.project.myCinema.dto.AuthRequest;
 import ru.project.myCinema.dto.UpdatePersonRequest;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.model.PersonAccountStatus;
+import ru.project.myCinema.model.Role;
 import ru.project.myCinema.repository.PersonRepository;
 import ru.project.myCinema.service.PersonService;
 
@@ -38,6 +39,9 @@ public class PersonServiceImpl implements PersonService {
         Person person = new Person();
         person.setLogin(authRequest.login());
         person.setPassword(passwordEncoder.encode(authRequest.password()));
+        person.setRole(Role.USER);
+        person.setBalance(0.0);
+        person.setAccountStatus(PersonAccountStatus.ACTIVE);
         return personRepository.save(person);
     }
 
@@ -124,6 +128,17 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person unblock(Person person) {
         person.setAccountStatus(PersonAccountStatus.ACTIVE);
+        return personRepository.save(person);
+    }
+
+    @Transactional
+    @Override
+    public Person changeRole(Person person) {
+        if(Role.USER.equals(person.getRole())) {
+            person.setRole(Role.ADMIN);
+        } else {
+            person.setRole(Role.USER);
+        }
         return personRepository.save(person);
     }
 

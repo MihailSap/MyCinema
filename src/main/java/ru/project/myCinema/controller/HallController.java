@@ -1,6 +1,7 @@
 package ru.project.myCinema.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.HallRequest;
@@ -69,6 +70,7 @@ public class HallController {
     /**
      * Создание зала
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public HallResponse create(@RequestBody HallRequest hallRequest){
         Hall hall = hallService.create(hallRequest);
@@ -78,6 +80,7 @@ public class HallController {
     /**
      * Удаление зала
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{hallId}")
     public DefaultResponse delete(@PathVariable("hallId") Long hallId){
         Hall hall = hallService.getById(hallId);
