@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changeset/006-create-booking-table.yaml
   - include:
       file: db/changelog/changeset/007-create-booking-seat-table.yaml
+  - include:
+      file: db/changelog/changeset/008-add-balance-and-account-status.yaml

@@ -32,7 +32,8 @@ public class PersonMapper {
                 person.getId(),
                 person.getLogin(),
                 person.getName(),
-                person.getSurname()
+                person.getSurname(),
+                person.getBalance()
         );
     }
 }

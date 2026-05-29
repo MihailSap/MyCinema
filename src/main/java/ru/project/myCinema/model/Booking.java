@@ -43,7 +43,7 @@ public class Booking extends BaseEntity {
      */
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "booking_seats",
+            name = "booking_seat",
             joinColumns = { @JoinColumn(name = "booking_id") },
             inverseJoinColumns = { @JoinColumn(name = "seat_id") }
     )

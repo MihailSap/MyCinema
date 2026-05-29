@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.AuthRequest;
 import ru.project.myCinema.dto.UpdatePersonRequest;
 import ru.project.myCinema.model.Person;
+import ru.project.myCinema.model.PersonAccountStatus;
 import ru.project.myCinema.repository.PersonRepository;
 import ru.project.myCinema.service.PersonService;
 
@@ -72,6 +73,9 @@ public class PersonServiceImpl implements PersonService {
     public Person update(UpdatePersonRequest updatePersonRequest, Person person) {
         String login = updatePersonRequest.login();
         if(login != null && !login.isEmpty()) {
+            if(isExistsByLogin(login)) {
+               throw new RuntimeException("Пользователь с login=%s уже существует".formatted(login));
+            }
             person.setLogin(login);
         }
 
@@ -85,6 +89,41 @@ public class PersonServiceImpl implements PersonService {
             person.setSurname(surname);
         }
 
+        return personRepository.save(person);
+    }
+
+    @Transactional
+    @Override
+    public Person topUpBalance(Person person, Double amount) {
+        Double currentBalance = person.getBalance();
+        if(currentBalance.isNaN()){
+            currentBalance = 0.0;
+        }
+
+        currentBalance += amount;
+        person.setBalance(currentBalance);
+
+        return personRepository.save(person);
+    }
+
+    @Transactional
+    @Override
+    public Person reduceBalance(Person person, Double amount) {
+        person.setBalance(person.getBalance() - amount);
+        return personRepository.save(person);
+    }
+
+    @Transactional
+    @Override
+    public Person block(Person person) {
+        person.setAccountStatus(PersonAccountStatus.BLOCKED);
+        return personRepository.save(person);
+    }
+
+    @Transactional
+    @Override
+    public Person unblock(Person person) {
+        person.setAccountStatus(PersonAccountStatus.ACTIVE);
         return personRepository.save(person);
     }
 

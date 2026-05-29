@@ -45,4 +45,24 @@ public interface PersonService {
      * Удаление пользователя
      */
     void delete(Person person);
+
+    /**
+     * Пополнение баланса пользователя
+     */
+    Person topUpBalance(Person person, Double amount);
+
+    /**
+     * Понижение баланса пользователя
+     */
+    Person reduceBalance(Person person, Double amount);
+
+    /**
+     * Заблокировать пользователя
+     */
+    Person block(Person person);
+
+    /**
+     * Разблокировать пользователя
+     */
+    Person unblock(Person person);
 }

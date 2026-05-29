@@ -1,9 +1,6 @@
 package ru.project.myCinema.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +31,14 @@ public class Person extends BaseEntity{
      * Пароль
      */
     private String password;
+
+    /**
+     * Баланс
+     */
+    private Double balance;
+
+    @Enumerated(EnumType.STRING)
+    private PersonAccountStatus accountStatus;
 
     /**
      * Заказы
@@ -79,5 +84,21 @@ public class Person extends BaseEntity{
 
     public void setBookings(Set<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    public PersonAccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(PersonAccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
     }
 }

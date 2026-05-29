@@ -5,9 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.PersonResponse;
+import ru.project.myCinema.dto.TopUpBalanceRequest;
 import ru.project.myCinema.dto.UpdatePersonRequest;
 import ru.project.myCinema.mapper.PersonMapper;
 import ru.project.myCinema.model.Person;
+import ru.project.myCinema.model.PersonAccountStatus;
 import ru.project.myCinema.service.AuthService;
 import ru.project.myCinema.service.PersonService;
 
@@ -81,5 +83,41 @@ public class PersonController {
         authService.logout(session);
         personService.delete(person);
         return new DefaultResponse("Вы удалили свой аккаунт");
+    }
+
+    /**
+     * Пополнение баланса авторизованного пользователя
+     */
+    @PostMapping("/me/balance")
+    public PersonResponse topUpBalance(@RequestBody TopUpBalanceRequest topUpBalanceRequest){
+        Person person = authService.getAuthenticatedPerson();
+        Person updatedPerson = personService.topUpBalance(person, topUpBalanceRequest.amount());
+        return personMapper.mapToPersonResponse(updatedPerson);
+    }
+
+    /**
+     * Блокировка пользователя по id
+     */
+    @PatchMapping("/{personId}/block")
+    public PersonResponse block(@PathVariable("personId") Long personId){
+        Person person = personService.getById(personId);
+        if(PersonAccountStatus.BLOCKED.equals(person.getAccountStatus())){
+            throw new RuntimeException("Указанный пользователь заблокирован");
+        }
+        Person updatedPerson = personService.block(person);
+        return personMapper.mapToPersonResponse(updatedPerson);
+    }
+
+    /**
+     * Разблокировка пользователя по id
+     */
+    @PatchMapping("/{personId}/unblock")
+    public PersonResponse unblock(@PathVariable("personId") Long personId){
+        Person person = personService.getById(personId);
+        if(PersonAccountStatus.ACTIVE.equals(person.getAccountStatus())){
+            throw new RuntimeException("Указанный пользователь не заблокирован");
+        }
+        Person updatedPerson = personService.unblock(person);
+        return personMapper.mapToPersonResponse(updatedPerson);
     }
 }

@@ -7,6 +7,7 @@ public record PersonResponse(
         Long id,
         String login,
         String name,
-        String surname
+        String surname,
+        Double balance
 ) {
 }
