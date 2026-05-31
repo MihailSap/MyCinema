@@ -1,5 +1,7 @@
-package ru.project.myCinema.dto;
+package ru.project.myCinema.dto.booking;
 
+import ru.project.myCinema.dto.person.PersonResponse;
+import ru.project.myCinema.dto.session.SessionResponse;
 import ru.project.myCinema.model.BookingStatus;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package ru.project.myCinema.service;
 
-import ru.project.myCinema.dto.HallRequest;
+import ru.project.myCinema.dto.hall.HallRequest;
 import ru.project.myCinema.model.Hall;
 
 import java.util.List;

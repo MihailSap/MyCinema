@@ -3,7 +3,7 @@ package ru.project.myCinema.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.project.myCinema.dto.MovieRequest;
+import ru.project.myCinema.dto.movie.MovieRequest;
 import ru.project.myCinema.model.Movie;
 import ru.project.myCinema.model.MovieAgeRating;
 import ru.project.myCinema.repository.MovieRepository;

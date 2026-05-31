@@ -1,6 +1,6 @@
 package ru.project.myCinema.service;
 
-import ru.project.myCinema.dto.MovieRequest;
+import ru.project.myCinema.dto.movie.MovieRequest;
 import ru.project.myCinema.model.Movie;
 
 import java.util.List;

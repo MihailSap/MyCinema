@@ -52,7 +52,7 @@ public class Person extends BaseEntity{
     /**
      * Заказы
      */
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "person")
     private Set<Booking> bookings = new HashSet<>();
 
     public String getLogin() {

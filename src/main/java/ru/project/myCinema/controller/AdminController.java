@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.project.myCinema.dto.HallResponse;
-import ru.project.myCinema.dto.MovieResponse;
-import ru.project.myCinema.dto.PersonResponse;
-import ru.project.myCinema.dto.SessionResponseDto;
+import ru.project.myCinema.dto.hall.HallResponse;
+import ru.project.myCinema.dto.movie.MovieResponse;
+import ru.project.myCinema.dto.person.PersonResponse;
+import ru.project.myCinema.dto.session.SessionResponseDto;
 import ru.project.myCinema.mapper.HallMapper;
 import ru.project.myCinema.mapper.MovieMapper;
 import ru.project.myCinema.mapper.PersonMapper;
@@ -90,10 +90,11 @@ public class AdminController {
      * Блокировка пользователя
      */
     @PostMapping("/{personId}/block")
-    public String block(@PathVariable("personId") Long personId) {
+    public String block(@PathVariable("personId") Long personId, Model model) {
         Person person = personService.getById(personId);
         if(PersonAccountStatus.BLOCKED.equals(person.getAccountStatus())) {
-            throw new RuntimeException("Пользователь уже заблокирован");
+            model.addAttribute("error", "Пользователь с таким логином уже существует");
+            return "redirect:/admin";
         }
         personService.block(person);
         return "redirect:/admin";
@@ -103,10 +104,11 @@ public class AdminController {
      * Разблокировка пользователя
      */
     @PostMapping("/{personId}/unblock")
-    public String unblock(@PathVariable("personId") Long personId) {
+    public String unblock(@PathVariable("personId") Long personId, Model model) {
         Person person = personService.getById(personId);
         if(PersonAccountStatus.ACTIVE.equals(person.getAccountStatus())) {
-            throw new RuntimeException("Пользователь не заблокирован");
+            model.addAttribute("error", "Пользователь с таким логином уже существует");
+            return "redirect:/admin";
         }
         personService.unblock(person);
         return "redirect:/admin";

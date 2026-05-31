@@ -2,8 +2,8 @@ package ru.project.myCinema.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.project.myCinema.dto.BookingCreateRequest;
-import ru.project.myCinema.dto.BookingResponse;
+import ru.project.myCinema.dto.booking.BookingCreateRequest;
+import ru.project.myCinema.dto.booking.BookingResponse;
 import ru.project.myCinema.mapper.BookingMapper;
 import ru.project.myCinema.model.*;
 import ru.project.myCinema.service.*;

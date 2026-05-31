@@ -1,9 +1,9 @@
 package ru.project.myCinema.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.project.myCinema.dto.SeatResponse;
-import ru.project.myCinema.dto.SeatShortResponse;
-import ru.project.myCinema.dto.SeatStatus;
+import ru.project.myCinema.dto.seat.SeatResponse;
+import ru.project.myCinema.dto.seat.SeatShortResponse;
+import ru.project.myCinema.dto.seat.SeatStatus;
 import ru.project.myCinema.model.Seat;
 
 import java.util.ArrayList;

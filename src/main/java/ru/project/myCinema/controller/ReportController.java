@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.myCinema.dto.ReportResponse;
+import ru.project.myCinema.dto.report.ReportResponse;
 import ru.project.myCinema.mapper.ReportMapper;
 import ru.project.myCinema.model.Report;
 import ru.project.myCinema.service.ReportService;

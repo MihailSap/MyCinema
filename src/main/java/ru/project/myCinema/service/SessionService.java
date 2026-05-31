@@ -1,6 +1,6 @@
 package ru.project.myCinema.service;
 
-import ru.project.myCinema.dto.SessionRequest;
+import ru.project.myCinema.dto.session.SessionRequest;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.model.Movie;
 import ru.project.myCinema.model.Session;

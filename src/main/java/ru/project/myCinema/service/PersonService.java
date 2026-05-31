@@ -1,7 +1,7 @@
 package ru.project.myCinema.service;
 
-import ru.project.myCinema.dto.AuthRequest;
-import ru.project.myCinema.dto.UpdatePersonRequest;
+import ru.project.myCinema.dto.person.AuthRequest;
+import ru.project.myCinema.dto.person.UpdatePersonRequest;
 import ru.project.myCinema.model.Person;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public interface PersonService {
     /**
      * Смена роли пользователя
      */
-    Person changeRole(Person person);
+    Person changeRole(Long personId);
 
     /**
      * Получение количества зарегистрированных пользователей

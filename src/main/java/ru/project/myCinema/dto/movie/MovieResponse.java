@@ -1,4 +1,4 @@
-package ru.project.myCinema.dto;
+package ru.project.myCinema.dto.movie;
 
 import ru.project.myCinema.model.MovieAgeRating;
 

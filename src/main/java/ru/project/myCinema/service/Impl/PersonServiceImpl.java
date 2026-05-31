@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.project.myCinema.dto.AuthRequest;
-import ru.project.myCinema.dto.UpdatePersonRequest;
+import ru.project.myCinema.dto.person.AuthRequest;
+import ru.project.myCinema.dto.person.UpdatePersonRequest;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.model.PersonAccountStatus;
 import ru.project.myCinema.model.Role;
@@ -133,13 +133,13 @@ public class PersonServiceImpl implements PersonService {
 
     @Transactional
     @Override
-    public Person changeRole(Person person) {
-        if(Role.USER.equals(person.getRole())) {
-            person.setRole(Role.ADMIN);
-        } else {
-            person.setRole(Role.USER);
-        }
-        return personRepository.save(person);
+    public Person changeRole(Long personId) {
+        Person actualPerson = personRepository.findById(personId)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        actualPerson.setRole(
+                actualPerson.getRole() == Role.USER ? Role.ADMIN : Role.USER
+        );
+        return personRepository.save(actualPerson);
     }
 
     @Transactional

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.project.myCinema.dto.BookingResponse;
-import ru.project.myCinema.dto.TopUpBalanceRequest;
-import ru.project.myCinema.dto.UpdatePersonRequest;
+import ru.project.myCinema.dto.booking.BookingResponse;
+import ru.project.myCinema.dto.person.TopUpBalanceRequest;
+import ru.project.myCinema.dto.person.UpdatePersonRequest;
 import ru.project.myCinema.mapper.BookingMapper;
 import ru.project.myCinema.model.Booking;
 import ru.project.myCinema.model.Person;
@@ -65,8 +65,7 @@ public class PersonController {
      * Страница пополнения баланса
      */
     @GetMapping("/me/balance")
-    public String topUpBalancePage(Model model) {
-        model.addAttribute("topUpBalanceRequest", new TopUpBalanceRequest(null));
+    public String topUpBalancePage() {
         return "person/edit-balance";
     }
 
@@ -88,7 +87,7 @@ public class PersonController {
     @PostMapping("/me/role")
     public String changeRole() {
         Person person = authService.getAuthenticatedPerson();
-        Person updatedPerson = personService.changeRole(person);
+        Person updatedPerson = personService.changeRole(person.getId());
         authService.refreshAuthentication(updatedPerson);
         return "redirect:/persons/me";
     }

@@ -2,7 +2,7 @@ package ru.project.myCinema.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.project.myCinema.dto.BookingResponse;
+import ru.project.myCinema.dto.booking.BookingResponse;
 import ru.project.myCinema.model.Booking;
 
 import java.util.ArrayList;

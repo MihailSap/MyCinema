@@ -1,4 +1,4 @@
-package ru.project.myCinema.dto;
+package ru.project.myCinema.dto.session;
 
 public record SessionResponseDto(
         Long id,

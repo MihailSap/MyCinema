@@ -3,7 +3,7 @@ package ru.project.myCinema.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.project.myCinema.dto.HallRequest;
+import ru.project.myCinema.dto.hall.HallRequest;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.repository.HallRepository;
 import ru.project.myCinema.service.HallService;

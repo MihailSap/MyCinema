@@ -5,9 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.myCinema.dto.MovieRequest;
-import ru.project.myCinema.dto.MovieResponse;
-import ru.project.myCinema.dto.SessionResponseDto;
+import ru.project.myCinema.dto.movie.MovieRequest;
+import ru.project.myCinema.dto.movie.MovieResponse;
+import ru.project.myCinema.dto.session.SessionResponseDto;
 import ru.project.myCinema.mapper.MovieMapper;
 import ru.project.myCinema.mapper.SessionMapper;
 import ru.project.myCinema.model.Movie;
@@ -113,7 +113,10 @@ public class MovieController {
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{movieId}/edit")
-    public String updateMovie(@PathVariable("movieId") Long movieId, @ModelAttribute("movie") MovieRequest movieRequest) {
+    public String updateMovie(
+            @PathVariable("movieId") Long movieId,
+            @ModelAttribute("movie") MovieRequest movieRequest
+    ) {
         Movie movie = movieService.getById(movieId);
         movieService.update(movieRequest, movie);
         return "redirect:/movies/" + movieId;

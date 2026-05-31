@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.myCinema.dto.AuthRequest;
+import ru.project.myCinema.dto.person.AuthRequest;
 import ru.project.myCinema.service.AuthService;
 import ru.project.myCinema.service.PersonService;
 
@@ -32,8 +32,7 @@ public class AuthController {
      * Страница входа
      */
     @GetMapping("/login")
-    public String loginPage(Model model) {
-        model.addAttribute("authRequest", new AuthRequest(null, null));
+    public String loginPage() {
         return "auth/login";
     }
 
@@ -41,8 +40,7 @@ public class AuthController {
      * Страница регистрации
      */
     @GetMapping("/register")
-    public String registerPage(Model model) {
-        model.addAttribute("authRequest", new AuthRequest(null, null));
+    public String registerPage() {
         return "auth/register";
     }
 

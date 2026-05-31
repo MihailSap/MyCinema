@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.DefaultResponse;
-import ru.project.myCinema.dto.PersonResponse;
-import ru.project.myCinema.dto.TopUpBalanceRequest;
-import ru.project.myCinema.dto.UpdatePersonRequest;
+import ru.project.myCinema.dto.person.PersonResponse;
+import ru.project.myCinema.dto.person.TopUpBalanceRequest;
+import ru.project.myCinema.dto.person.UpdatePersonRequest;
 import ru.project.myCinema.mapper.PersonMapper;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.model.PersonAccountStatus;
@@ -125,14 +125,14 @@ public class ApiPersonController {
         return personMapper.mapToPersonResponse(updatedPerson);
     }
 
-    /**
-     * Обновление роли пользователя
-     */
-    @PatchMapping("/me/role")
-    public PersonResponse changeRole(){
-        Person person = authService.getAuthenticatedPerson();
-        Person updatePerson = personService.changeRole(person);
-        authService.refreshAuthentication(updatePerson);
-        return personMapper.mapToPersonResponse(updatePerson);
-    }
+//    /**
+//     * Обновление роли пользователя
+//     */
+//    @PatchMapping("/me/role")
+//    public PersonResponse changeRole(){
+//        Person person = authService.getAuthenticatedPerson();
+//        Person updatePerson = personService.changeRole(person);
+//        authService.refreshAuthentication(updatePerson);
+//        return personMapper.mapToPersonResponse(updatePerson);
+//    }
 }

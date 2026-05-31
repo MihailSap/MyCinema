@@ -2,8 +2,8 @@ package ru.project.myCinema.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.project.myCinema.dto.SessionResponse;
-import ru.project.myCinema.dto.SessionResponseDto;
+import ru.project.myCinema.dto.session.SessionResponse;
+import ru.project.myCinema.dto.session.SessionResponseDto;
 import ru.project.myCinema.model.Session;
 
 import java.util.ArrayList;

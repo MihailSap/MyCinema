@@ -2,7 +2,7 @@ package ru.project.myCinema.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.project.myCinema.dto.HallResponse;
+import ru.project.myCinema.dto.hall.HallResponse;
 import ru.project.myCinema.model.Hall;
 
 import java.util.ArrayList;

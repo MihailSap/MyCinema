@@ -1,4 +1,4 @@
-package ru.project.myCinema.dto;
+package ru.project.myCinema.dto.person;
 
 import ru.project.myCinema.model.PersonAccountStatus;
 import ru.project.myCinema.model.Role;

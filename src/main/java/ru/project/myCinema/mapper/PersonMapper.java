@@ -1,7 +1,7 @@
 package ru.project.myCinema.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.project.myCinema.dto.PersonResponse;
+import ru.project.myCinema.dto.person.PersonResponse;
 import ru.project.myCinema.model.Person;
 
 import java.util.ArrayList;

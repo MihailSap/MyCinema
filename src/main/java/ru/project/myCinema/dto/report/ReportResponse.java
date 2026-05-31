@@ -1,4 +1,4 @@
-package ru.project.myCinema.dto;
+package ru.project.myCinema.dto.report;
 
 import ru.project.myCinema.model.ReportStatus;
 
