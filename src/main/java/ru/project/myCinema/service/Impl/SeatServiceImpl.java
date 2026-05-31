@@ -56,17 +56,6 @@ public class SeatServiceImpl implements SeatService {
 
     @Transactional
     @Override
-    public void createByHall(List<Integer> seatsNumbers, Hall hall) {
-        for (Integer seatNumber : seatsNumbers) {
-            Seat seat = new Seat();
-            seat.setHall(hall);
-            seat.setNumber(seatNumber);
-            seatRepository.save(seat);
-        }
-    }
-
-    @Transactional
-    @Override
     public void createByHall(Integer seatNumber, Hall hall) {
         Seat seat = new Seat();
         seat.setHall(hall);

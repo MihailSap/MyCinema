@@ -28,7 +28,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
               AND b.session.startDateTime >= :now
             ORDER BY b.session.startDateTime
             """)
-    List<Booking> findActivePendingBookings(
+    List<Booking> findActiveBookings(
             @Param("person") Person person,
             @Param("status") BookingStatus status,
             @Param("now") LocalDateTime now

@@ -83,6 +83,6 @@ public class ApiMovieController {
     public DefaultResponse delete(@PathVariable("movieId") Long movieId){
         Movie movie = movieService.getById(movieId);
         movieService.delete(movie);
-        return new DefaultResponse("Фильм с id=%s успешно удален".formatted(movie));
+        return new DefaultResponse("Фильм с id=%s успешно удален".formatted(movie.getId()));
     }
 }

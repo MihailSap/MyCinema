@@ -22,11 +22,6 @@ public interface SeatService {
     boolean isSeatBooked(Seat seat, Session session);
 
     /**
-     * Создание мест для зала
-     */
-    void createByHall(List<Integer> seatsNumbers, Hall hall);
-
-    /**
      * Создание места для зала
      */
     void createByHall(Integer seatNumber, Hall hall);

@@ -34,13 +34,13 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     @Override
     public List<Booking> getPendingActualByPerson(Person person) {
-        return bookingRepository.findActivePendingBookings(person, BookingStatus.PENDING, LocalDateTime.now());
+        return bookingRepository.findActiveBookings(person, BookingStatus.PENDING, LocalDateTime.now());
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Booking> getDoneActualByPerson(Person person) {
-        return bookingRepository.findActivePendingBookings(person, BookingStatus.DONE, LocalDateTime.now());
+        return bookingRepository.findActiveBookings(person, BookingStatus.DONE, LocalDateTime.now());
     }
 
     @Transactional

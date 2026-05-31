@@ -74,7 +74,7 @@ public class HallController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/new")
     public String createPage(Model model) {
-        model.addAttribute("hall", new HallRequest(null, null, List.of()));
+        model.addAttribute("hall", new HallRequest(null, null));
         return "halls/create";
     }
 
@@ -97,11 +97,7 @@ public class HallController {
         Hall hall = hallService.getById(id);
         HallRequest request = new HallRequest(
                 hall.getNumber(),
-                hall.getCapacity(),
-                hall.getSeats()
-                        .stream()
-                        .map(Seat::getNumber)
-                        .toList()
+                hall.getCapacity()
         );
 
         model.addAttribute("hallId", id);

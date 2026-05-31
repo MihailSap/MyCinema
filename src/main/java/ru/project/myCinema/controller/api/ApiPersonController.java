@@ -125,14 +125,14 @@ public class ApiPersonController {
         return personMapper.mapToPersonResponse(updatedPerson);
     }
 
-//    /**
-//     * Обновление роли пользователя
-//     */
-//    @PatchMapping("/me/role")
-//    public PersonResponse changeRole(){
-//        Person person = authService.getAuthenticatedPerson();
-//        Person updatePerson = personService.changeRole(person);
-//        authService.refreshAuthentication(updatePerson);
-//        return personMapper.mapToPersonResponse(updatePerson);
-//    }
+    /**
+     * Обновление роли пользователя
+     */
+    @PatchMapping("/me/role")
+    public PersonResponse changeRole(){
+        Person person = authService.getAuthenticatedPerson();
+        Person updatePerson = personService.changeRole(person.getId());
+        authService.refreshAuthentication(updatePerson);
+        return personMapper.mapToPersonResponse(updatePerson);
+    }
 }

@@ -58,10 +58,10 @@ public class ReportServiceImpl implements ReportService {
             long startTime = System.currentTimeMillis();
 
             CompletableFuture<EntityReportData> entityReportDataPerson = supplyAsyncWithExecuteTime(personService::getPersonsCount);
-            CompletableFuture<EntityReportData> entityReportDataBook = supplyAsyncWithExecuteTime(movieService::getMovieCount);
+            CompletableFuture<EntityReportData> entityReportDataMovie = supplyAsyncWithExecuteTime(movieService::getMovieCount);
 
             EntityReportData entityReportDataPersonResult = entityReportDataPerson.join();
-            EntityReportData entityReportDataBookResult = entityReportDataBook.join();
+            EntityReportData entityReportDataBookResult = entityReportDataMovie.join();
 
             long endTime = System.currentTimeMillis() - startTime;
 
