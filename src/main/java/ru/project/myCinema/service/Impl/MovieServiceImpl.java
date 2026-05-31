@@ -30,7 +30,7 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = new Movie();
         movie.setTitle(movieRequest.title());
         movie.setAgeRating(movieRequest.ageRating());
-        movie.setMinutesCount(movieRequest.minutesCount());
+        movie.setMinutesLength(movieRequest.minutesCount());
         return movieRepository.save(movie);
     }
 
@@ -62,7 +62,7 @@ public class MovieServiceImpl implements MovieService {
 
         Integer minutesCount = movieRequest.minutesCount();
         if(minutesCount != null) {
-            movie.setMinutesCount(minutesCount);
+            movie.setMinutesLength(minutesCount);
         }
         return movieRepository.save(movie);
     }
@@ -71,5 +71,11 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void delete(Movie movie) {
         movieRepository.delete(movie);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getMovieCount() {
+        return movieRepository.count();
     }
 }

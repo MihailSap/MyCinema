@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавить фильм</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Добавить фильм</h1>
+<form th:action="@{/movies/new}" method="post">
+    <p>Название:
+        <input type="text" name="title"/>
+    </p>
+    <p>Возрастной рейтинг:
+        <select name="ageRating">
+            <option value="G">G</option>
+            <option value="PG">PG</option>
+            <option value="PG_13">PG-13</option>
+            <option value="R">R</option>
+            <option value="NC_17">NC-17</option>
+        </select>
+    </p>
+    <p>Длительность:
+        <input type="number" name="minutesCount"/>
+    </p>
+    <button type="submit">Сохранить</button>
+</form>
+<br>
+</body>
+</html>

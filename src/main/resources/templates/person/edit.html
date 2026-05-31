@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Обновление профиля</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Обновление профиля</h1>
+<form th:action="@{/persons/me/update}" method="post">
+    <div>
+        <label>Логин:</label>
+        <input type="text" name="login" th:value="${updatePersonRequest.login}">
+    </div>
+    <div>
+        <label>Имя:</label>
+        <input type="text" name="name" th:value="${updatePersonRequest.name}">
+    </div>
+    <div>
+        <label>Фамилия:</label>
+        <input type="text" name="surname" th:value="${updatePersonRequest.surname}">
+    </div>
+    <br>
+    <button type="submit">Сохранить</button>
+</form>
+<br>
+</body>
+</html>

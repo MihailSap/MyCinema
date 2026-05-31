@@ -70,4 +70,9 @@ public interface PersonService {
      * Смена роли пользователя
      */
     Person changeRole(Person person);
+
+    /**
+     * Получение количества зарегистрированных пользователей
+     */
+    long getPersonsCount();
 }

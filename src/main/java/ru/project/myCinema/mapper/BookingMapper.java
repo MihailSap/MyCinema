@@ -45,6 +45,7 @@ public class BookingMapper {
      */
     public BookingResponse mapToBookingResponse(Booking booking) {
         return new BookingResponse(
+                booking.getId(),
                 booking.getCreatedAt().toString(),
                 booking.getStatus(),
                 personMapper.mapToPersonResponse(booking.getPerson()),

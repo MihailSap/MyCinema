@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Фильмы</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Список фильмов</h1>
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Возрастной рейтинг</th>
+        <th>Длительность</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="movie : ${movies}">
+        <td th:text="${movie.id}"></td>
+        <td>
+            <a th:href="@{/movies/{id}(id=${movie.id})}" th:text="${movie.title}"></a>
+        </td>
+        <td th:text="${movie.ageRating}"></td>
+        <td th:text="${movie.minutesLength + ' мин'}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

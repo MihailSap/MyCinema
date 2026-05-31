@@ -45,6 +45,15 @@ public class SeatServiceImpl implements SeatService {
         return seatRepository.findByHall(hall);
     }
 
+    @Override
+    public List<Seat> getAvailableSeatsBySession(Session session) {
+        return session.getHall()
+                .getSeats()
+                .stream()
+                .filter(seat -> !isSeatBooked(seat, session))
+                .toList();
+    }
+
     @Transactional
     @Override
     public void createByHall(List<Integer> seatsNumbers, Hall hall) {
@@ -58,7 +67,28 @@ public class SeatServiceImpl implements SeatService {
 
     @Transactional
     @Override
+    public void createByHall(Integer seatNumber, Hall hall) {
+        Seat seat = new Seat();
+        seat.setHall(hall);
+        seat.setNumber(seatNumber);
+        seatRepository.save(seat);
+    }
+
+    @Transactional
+    @Override
     public void deleteByHall(Hall hall) {
         seatRepository.deleteByHall(hall);
+    }
+
+    @Transactional
+    @Override
+    public void delete(Seat seat) {
+        seatRepository.delete(seat);
+    }
+
+    @Transactional
+    @Override
+    public void deleteByHallAndNumberGreaterThan(Hall hall, Integer seatNumber) {
+        seatRepository.deleteByHallAndNumberGreaterThan(hall, seatNumber);
     }
 }

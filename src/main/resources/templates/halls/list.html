@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Залы</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Список залов</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Номер</th>
+        <th>Вместимость</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="hall : ${halls}">
+        <td th:text="${hall.id}"></td>
+        <td>
+            <a th:href="@{/halls/{id}(id=${hall.id})}" th:text="${hall.number}"></a>
+        </td>
+        <td th:text="${hall.capacity}"></td>
+        <td sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/halls/{id}/edit(id=${hall.id})}">РЕДАКТИРОВАТЬ</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

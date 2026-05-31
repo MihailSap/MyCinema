@@ -22,4 +22,9 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
      * Поиск мест по залу
      */
     List<Seat> findByHall(Hall hall);
+
+    /**
+     * Удаление мест в зале с количеством больше указанного
+     */
+    void deleteByHallAndNumberGreaterThan(Hall hall, Integer seatNumber);
 }

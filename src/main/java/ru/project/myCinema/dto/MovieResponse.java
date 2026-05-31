@@ -5,7 +5,7 @@ import ru.project.myCinema.model.MovieAgeRating;
 public record MovieResponse(
         Long id,
         String title,
-        MovieAgeRating movieAgeRating,
-        Integer minutesCount
+        MovieAgeRating ageRating,
+        Integer minutesLength
 ) {
 }

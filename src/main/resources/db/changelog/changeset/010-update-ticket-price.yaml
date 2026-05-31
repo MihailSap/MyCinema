@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-update-ticket-price
+      author: SapeginMihail
+      changes:
+        - modifyDataType:
+            tableName: session
+            columnName: ticket_price
+            newDataType: numeric(6,2)

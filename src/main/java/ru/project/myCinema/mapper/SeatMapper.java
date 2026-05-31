@@ -2,6 +2,7 @@ package ru.project.myCinema.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.project.myCinema.dto.SeatResponse;
+import ru.project.myCinema.dto.SeatShortResponse;
 import ru.project.myCinema.dto.SeatStatus;
 import ru.project.myCinema.model.Seat;
 
@@ -44,6 +45,27 @@ public class SeatMapper {
         return new SeatResponse(
                 seat.getNumber(),
                 isBooked ? SeatStatus.TAKEN : SeatStatus.AVAILABLE
+        );
+    }
+
+    /**
+     * Маппинг сущностей Seat в SeatShortResponse
+     */
+    public List<SeatShortResponse> mapToSeatShortResponses(List<Seat> seats) {
+        List<SeatShortResponse> seatShortResponses = new ArrayList<>();
+        for (Seat seat : seats) {
+            seatShortResponses.add(mapToSeatShortResponse(seat));
+        }
+        return seatShortResponses;
+    }
+
+    /**
+     * Маппинг сущности Seat в SeatShortResponse
+     */
+    public SeatShortResponse mapToSeatShortResponse(Seat seat){
+        return new SeatShortResponse(
+                seat.getId(),
+                seat.getNumber()
         );
     }
 }

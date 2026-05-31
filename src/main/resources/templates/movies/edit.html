@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование фильма</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Редактирование фильма</h1>
+<form th:action="@{/movies/{id}/edit(id=${movieId})}" th:object="${movie}" method="post">
+    <div>
+        <label>Название:</label>
+        <input type="text" th:field="*{title}">
+    </div>
+    <div>
+        <label>Возрастной рейтинг:</label>
+        <select th:field="*{ageRating}">
+            <option th:each="rating : ${ageRatings}" th:value="${rating}" th:text="${rating}">
+            </option>
+        </select>
+    </div>
+    <div>
+        <label>Длительность (мин):</label>
+        <input type="number" th:field="*{minutesCount}">
+    </div>
+    <button type="submit">СОХРАНИТЬ</button>
+</form>
+</body>
+</html>

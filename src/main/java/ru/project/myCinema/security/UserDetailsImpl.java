@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.project.myCinema.model.Person;
+import ru.project.myCinema.model.PersonAccountStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -42,7 +43,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !PersonAccountStatus.BLOCKED.equals(person.getAccountStatus());
     }
 
     @Override

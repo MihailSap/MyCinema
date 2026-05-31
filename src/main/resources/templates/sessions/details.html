@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Сеанс</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Информация о сеансе</h1>
+<p>
+    <b>Фильм:</b>
+    <span th:text="${sessionDto.movieTitle}"></span>
+</p>
+<p>
+    <b>Зал:</b>
+    <span th:text="${sessionDto.hallNumber}"></span>
+</p>
+<p>
+    <b>Начало:</b>
+    <span th:text="${sessionDto.startDateTime}"></span>
+</p>
+<p>
+    <b>Цена билета:</b>
+    <span th:text="${sessionDto.ticketPrice}"></span>
+</p>
+<h2>Места</h2>
+<table border="1">
+    <tr>
+        <th>Место</th>
+        <th>Статус</th>
+    </tr>
+    <tr th:each="seat : ${seats}">
+        <td th:text="${seat.number}"></td>
+        <td th:text="${seat.status}"></td>
+    </tr>
+</table>
+<a th:href="@{/bookings/new(sessionId=${sessionDto.id})}">Создать заказ</a>
+</body>
+</html>

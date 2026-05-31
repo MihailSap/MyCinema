@@ -26,7 +26,7 @@ public class Movie extends BaseEntity{
     /**
      * Длительность в минутах
      */
-    private Integer minutesCount;
+    private Integer minutesLength;
 
     /**
      * Сеансы
@@ -50,12 +50,12 @@ public class Movie extends BaseEntity{
         this.ageRating = ageRating;
     }
 
-    public Integer getMinutesCount() {
-        return minutesCount;
+    public Integer getMinutesLength() {
+        return minutesLength;
     }
 
-    public void setMinutesCount(Integer minutesCount) {
-        this.minutesCount = minutesCount;
+    public void setMinutesLength(Integer minutesCount) {
+        this.minutesLength = minutesCount;
     }
 
     public Set<Session> getSessions() {

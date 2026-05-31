@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+<header th:fragment="header" class="header">
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li>
+                <a th:href="@{/sessions/actual}">Актуальные сеансы</a>
+            </li>
+            <li>
+                <a th:href="@{/movies}">Фильмы</a>
+            </li>
+            <li>
+                <a th:href="@{/halls}">Залы</a>
+            </li>
+            <li>
+                <a th:href="@{/persons/me}">Профиль</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin}">Админ-панель</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+</body>
+</html>

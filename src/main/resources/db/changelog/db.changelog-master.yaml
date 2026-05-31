@@ -17,3 +17,7 @@ databaseChangeLog:
       file: db/changelog/changeset/008-add-balance-and-account-status.yaml
   - include:
       file: db/changelog/changeset/009-add-role-to-person.yaml
+  - include:
+      file: db/changelog/changeset/010-update-ticket-price.yaml
+  - include:
+      file: db/changelog/changeset/011-report-create.yaml

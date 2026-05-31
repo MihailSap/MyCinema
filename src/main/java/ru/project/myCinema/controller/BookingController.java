@@ -1,21 +1,26 @@
 package ru.project.myCinema.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.BookingCreateRequest;
-import ru.project.myCinema.dto.BookingResponse;
-import ru.project.myCinema.mapper.BookingMapper;
-import ru.project.myCinema.model.*;
+import ru.project.myCinema.dto.SeatShortResponse;
+import ru.project.myCinema.mapper.SeatMapper;
+import ru.project.myCinema.model.Booking;
+import ru.project.myCinema.model.Person;
+import ru.project.myCinema.model.Seat;
+import ru.project.myCinema.model.Session;
 import ru.project.myCinema.service.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Контроллер для управления заказами
+ * Контроллер для работы с заказами
  */
-@RestController
-@RequestMapping("/api/bookings")
+@Controller
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final AuthService authService;
@@ -23,7 +28,7 @@ public class BookingController {
     private final SessionService sessionService;
     private final PersonService personService;
     private final SeatService seatService;
-    private final BookingMapper bookingMapper;
+    private final SeatMapper seatMapper;
 
     @Autowired
     public BookingController(
@@ -32,91 +37,78 @@ public class BookingController {
             SessionService sessionService,
             PersonService personService,
             SeatService seatService,
-            BookingMapper bookingMapper
+            SeatMapper seatMapper
     ) {
         this.authService = authService;
         this.bookingService = bookingService;
         this.sessionService = sessionService;
         this.personService = personService;
         this.seatService = seatService;
-        this.bookingMapper = bookingMapper;
+        this.seatMapper = seatMapper;
     }
 
     /**
-     * Получение заказа по id
+     * Страница создания заказа
      */
-    @GetMapping("/{bookingId}")
-    public BookingResponse getById(@PathVariable("bookingId") Long bookingId){
-        Booking booking = bookingService.getById(bookingId);
-        return bookingMapper.mapToBookingResponse(booking);
+    @GetMapping("/new")
+    public String createPage(@RequestParam Long sessionId, Model model) {
+        Session session = sessionService.getById(sessionId);
+        List<Seat> availableSeats = seatService.getAvailableSeatsBySession(session);
+        List<SeatShortResponse> seatShortResponses = seatMapper.mapToSeatShortResponses(availableSeats);
+        model.addAttribute("sessionId", sessionId);
+        model.addAttribute("availableSeats", seatShortResponses);
+
+        return "bookings/create";
     }
 
     /**
      * Создание заказа
      */
-    @PostMapping
-    public BookingResponse create(@RequestBody BookingCreateRequest bookingCreateRequest){
+    @PostMapping("/new")
+    public String create(@ModelAttribute BookingCreateRequest request) {
         Person person = authService.getAuthenticatedPerson();
-        Session session = sessionService.getById(bookingCreateRequest.sessionId());
-        Seat seat = seatService.getById(bookingCreateRequest.seatId());
-        if(session.getStartDateTime().isBefore(LocalDateTime.now())){
+        Session session = sessionService.getById(request.sessionId());
+        Seat seat = seatService.getById(request.seatId());
+
+        if (session.getStartDateTime().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Нельзя забронировать место на прошедший сеанс");
         }
-        if(!seat.getHall().getId().equals(session.getHall().getId())){
+        if (!seat.getHall().getId().equals(session.getHall().getId())) {
             throw new RuntimeException("Место не принадлежит залу данного сеанса");
         }
-        if(seatService.isSeatBooked(seat, session)){
+        if (seatService.isSeatBooked(seat, session)) {
             throw new RuntimeException("Место занято");
         }
 
-        Booking booking = bookingService.create(person, session, seat);
-        return bookingMapper.mapToBookingResponse(booking);
-    }
-
-    /**
-     * Получение всех неоплаченных заказов авторизованного пользователя
-     */
-    @GetMapping("/actual/pending")
-    public List<BookingResponse> getMyPendingActual(){
-        Person person = authService.getAuthenticatedPerson();
-        List<Booking> bookings = bookingService.getPendingActualByPerson(person);
-        return bookingMapper.mapToBookingResponses(bookings);
-    }
-
-    /**
-     * Получение всех оплаченных заказов авторизованного пользователя
-     */
-    @GetMapping("/actual/done")
-    public List<BookingResponse> getMyDoneActual(){
-        Person person = authService.getAuthenticatedPerson();
-        List<Booking> bookings = bookingService.getDoneActualByPerson(person);
-        return bookingMapper.mapToBookingResponses(bookings);
+        bookingService.create(person, session, seat);
+        return "redirect:/persons/me";
     }
 
     /**
      * Оплата заказа
      */
-    @PatchMapping("/{bookingId}/pay")
-    public BookingResponse pay(@PathVariable("bookingId") Long bookingId){
+    @PostMapping("/{id}/pay")
+    public String pay(@PathVariable("id") Long id) {
         Person person = authService.getAuthenticatedPerson();
-        Booking booking = bookingService.getById(bookingId);
+        Booking booking = bookingService.getById(id);
         double resultPrice = booking.getSeats().size() * booking.getSession().getTicketPrice();
-        if(Double.compare(person.getBalance(), resultPrice) < 0){
-            throw new RuntimeException("Недостаточно денег на балансе для оплаты заказа");
+        if (person.getBalance() < resultPrice) {
+            throw new RuntimeException("Недостаточно средств");
         }
 
         personService.reduceBalance(person, resultPrice);
-        Booking updatedBooking = bookingService.pay(booking);
-        return bookingMapper.mapToBookingResponse(updatedBooking);
+        bookingService.pay(booking);
+
+        return "redirect:/persons/me";
     }
 
     /**
      * Отмена заказа
      */
-    @PatchMapping("/{bookingId}/cancel")
-    public BookingResponse cancel(@PathVariable("bookingId") Long bookingId){
-        Booking booking = bookingService.getById(bookingId);
-        Booking updatedBooking = bookingService.cancel(booking);
-        return bookingMapper.mapToBookingResponse(updatedBooking);
+    @PostMapping("/{id}/cancel")
+    public String cancel(@PathVariable("id") Long id) {
+        Booking booking = bookingService.getById(id);
+        bookingService.cancel(booking);
+        return "redirect:/persons/me";
     }
 }

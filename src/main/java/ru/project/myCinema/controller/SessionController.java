@@ -2,11 +2,12 @@ package ru.project.myCinema.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.SeatResponse;
 import ru.project.myCinema.dto.SessionRequest;
-import ru.project.myCinema.dto.SessionResponse;
+import ru.project.myCinema.dto.SessionResponseDto;
 import ru.project.myCinema.mapper.SeatMapper;
 import ru.project.myCinema.mapper.SessionMapper;
 import ru.project.myCinema.model.Hall;
@@ -22,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Контроллер для управления сеансами
+ * Контроллер для работы с сеансами
  */
-@RestController
-@RequestMapping("/api/sessions")
+@Controller
+@RequestMapping("/sessions")
 public class SessionController {
 
     private final MovieService movieService;
@@ -53,130 +54,102 @@ public class SessionController {
     }
 
     /**
-     * Получение всех сеансов
-     */
-    @GetMapping
-    public List<SessionResponse> getAll(){
-        List<Session> sessions = sessionService.getAllSessions();
-        return sessionMapper.mapToSessionResponses(sessions);
-    }
-
-    /**
-     * Получение сеанса по id
-     */
-    @GetMapping("/{sessionId}")
-    public SessionResponse getById(@PathVariable("sessionId") Long sessionId){
-        Session session = sessionService.getById(sessionId);
-        return sessionMapper.mapToSessionResponse(session);
-    }
-
-    /**
-     * Получение мест с их статусом по сеансу
-     */
-    @GetMapping("/{sessionId}/seats")
-    public List<SeatResponse> getSeatsBySessionId(@PathVariable("sessionId") Long sessionId){
-        Session session = sessionService.getById(sessionId);
-        List<SeatResponse> seatResponses = new ArrayList<>();
-        for(Seat seat : session.getHall().getSeats()){
-            boolean isSeatBooked = seatService.isSeatBooked(seat, session);
-            seatResponses.add(seatMapper.mapToSeatResponse(seat, isSeatBooked));
-        }
-        return seatResponses;
-    }
-
-    /**
-     * Получение предстоящих сеансов
+     * Страница с предстоящими сеансами
      */
     @GetMapping("/actual")
-    public List<SessionResponse> getAllActual(){
-        List<Session> sessions = sessionService.getActualSessions();
-        return sessionMapper.mapToSessionResponses(sessions);
+    public String actualSessions(Model model) {
+        List<Session> actualSessions = sessionService.getActualSessions();
+        List<SessionResponseDto> actualSessionsResponsesDto = sessionMapper.mapToSessionResponseDtos(actualSessions);
+        model.addAttribute("sessions", actualSessionsResponsesDto);
+        return "sessions/list";
     }
 
     /**
-     * Получение всех предстоящих сеансов фильма
-     */
-    @GetMapping("/actual/by-movie/{movieId}")
-    public List<SessionResponse> getAllActualByMovie(@PathVariable("movieId") Long movieId){
-        Movie movie = movieService.getById(movieId);
-        List<Session> sessions = sessionService.getActualByMovie(movie);
-        return sessionMapper.mapToSessionResponses(sessions);
-    }
-
-    /**
-     * Получение всех предстоящих сеансов в зале
-     */
-    @GetMapping("/actual/by-hall/{hallId}")
-    public List<SessionResponse> getAllActualByHall(@PathVariable("hallId") Long hallId){
-        Hall hall = hallService.getById(hallId);
-        List<Session> sessions = sessionService.getActualByHall(hall);
-        return sessionMapper.mapToSessionResponses(sessions);
-    }
-
-    /**
-     * Создание сеанса
+     * Страница создания нового сеанса
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public SessionResponse create(@RequestBody SessionRequest sessionRequest){
+    @GetMapping("/new")
+    public String createPage(Model model) {
+        model.addAttribute("session", new SessionRequest(null, null, null, null));
+        model.addAttribute("movies", movieService.getAllMovies());
+        model.addAttribute("halls", hallService.getAllHalls());
+        return "sessions/create";
+    }
+
+    /**
+     * Создание нового сеанса
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/new")
+    public String create(
+            @ModelAttribute SessionRequest sessionRequest
+    ) {
         Hall hall = hallService.getById(sessionRequest.hallId());
         Movie movie = movieService.getById(sessionRequest.movieId());
-        Session session = sessionService.create(sessionRequest, hall, movie);
-        return sessionMapper.mapToSessionResponse(session);
+        sessionService.create(sessionRequest, hall, movie);
+        return "redirect:/sessions/actual";
     }
 
     /**
-     * Редактирование данных сеанса
+     * Страница редактирования сеанса
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{sessionId}")
-    public SessionResponse update(
-            @PathVariable("sessionId") Long sessionId,
-            @RequestBody SessionRequest sessionRequest
-    ){
-        Session session = sessionService.getById(sessionId);
-        Session updatedSession = sessionService.update(sessionRequest, session);
-        return sessionMapper.mapToSessionResponse(updatedSession);
+    @GetMapping("/{id}/edit")
+    public String editPage(
+            @PathVariable("id") Long id,
+            Model model
+    ) {
+        Session session = sessionService.getById(id);
+        SessionRequest request = new SessionRequest(
+                session.getTicketPrice(),
+                session.getStartDateTime().toString(),
+                session.getHall().getId(),
+                session.getMovie().getId()
+        );
+
+        model.addAttribute("sessionId", id);
+        model.addAttribute("session", request);
+
+        return "sessions/edit";
     }
 
     /**
-     * Смена зала, в котором будет проходить сеанс
+     * Редактирование сеанса
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{sessionId}/hall")
-    public SessionResponse updateHall(
-            @PathVariable("sessionId") Long sessionId,
-            @RequestBody SessionRequest sessionRequest
-    ){
-        Hall hall = hallService.getById(sessionRequest.hallId());
-        Session session = sessionService.getById(sessionId);
-        Session updatedSession = sessionService.updateHall(session, hall);
-        return sessionMapper.mapToSessionResponse(updatedSession);
-    }
-
-    /**
-     * Смена фильма, который будет показан на сеансе
-     */
-    @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{sessionId}/movie")
-    public SessionResponse updateMovie(
-            @PathVariable("sessionId") Long sessionId,
-            @RequestBody SessionRequest sessionRequest
-    ){
-        Movie movie = movieService.getById(sessionRequest.movieId());
-        Session session = sessionService.getById(sessionId);
-        Session updatedSession = sessionService.updateMovie(session, movie);
-        return sessionMapper.mapToSessionResponse(updatedSession);
+    @PostMapping("/{id}/edit")
+    public String edit(@PathVariable("id") Long id, @ModelAttribute SessionRequest sessionRequest) {
+        Session session = sessionService.getById(id);
+        sessionService.update(sessionRequest, session);
+        return "redirect:/sessions/actual";
     }
 
     /**
      * Удаление сеанса
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{sessionId}")
-    public DefaultResponse delete(@PathVariable("sessionId") Long sessionId){
-        Session session = sessionService.getById(sessionId);
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        Session session = sessionService.getById(id);
         sessionService.delete(session);
-        return new DefaultResponse("Сеанс с id=%s успешно удален".formatted(session));
+        return "redirect:/admin";
+    }
+
+    /**
+     * Страница конкретного сеанса
+     */
+    @GetMapping("/{id}")
+    public String sessionPage(@PathVariable("id") Long id, Model model) {
+        Session session = sessionService.getById(id);
+        List<SeatResponse> seatResponses = new ArrayList<>();
+        for (Seat seat : session.getHall().getSeats()) {
+            boolean isSeatBooked = seatService.isSeatBooked(seat, session);
+            SeatResponse seatResponse = seatMapper.mapToSeatResponse(seat, isSeatBooked);
+            seatResponses.add(seatResponse);
+        }
+
+        model.addAttribute("sessionDto", sessionMapper.mapToSessionResponseDto(session));
+        model.addAttribute("seats", seatResponses);
+        return "sessions/details";
     }
 }

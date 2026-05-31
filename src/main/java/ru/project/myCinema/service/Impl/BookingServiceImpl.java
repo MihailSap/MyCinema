@@ -43,13 +43,14 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findActivePendingBookings(person, BookingStatus.DONE, LocalDateTime.now());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public Booking pay(Booking booking) {
         booking.setStatus(BookingStatus.DONE);
         return bookingRepository.save(booking);
     }
 
+    @Transactional
     @Override
     public Booking cancel(Booking booking) {
         booking.setStatus(BookingStatus.CANCELED);

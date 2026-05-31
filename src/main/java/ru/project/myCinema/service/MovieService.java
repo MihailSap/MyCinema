@@ -34,4 +34,9 @@ public interface MovieService {
      * Удаление фильма
      */
     void delete(Movie movie);
+
+    /**
+     * Получение количества созданных фильмов
+     */
+    long getMovieCount();
 }

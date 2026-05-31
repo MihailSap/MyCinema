@@ -32,12 +32,16 @@ public class HallServiceImpl implements HallService {
     @Transactional
     @Override
     public Hall create(HallRequest hallRequest) {
+        Integer capacity = hallRequest.capacity();
+
         Hall hall = new Hall();
         hall.setNumber(hallRequest.number());
-        hall.setCapacity(hallRequest.capacity());
+        hall.setCapacity(capacity);
         hallRepository.save(hall);
 
-        seatService.createByHall(hallRequest.seatsNumbers(), hall);
+        for(int i = 1; i < capacity + 1; i++){
+            seatService.createByHall(i, hall);
+        }
 
         return hall;
     }
@@ -55,28 +59,30 @@ public class HallServiceImpl implements HallService {
         return hallRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Hall update(HallRequest hallRequest, Hall hall) {
         Integer number = hallRequest.number();
-        if(number != null){
+        if (number != null) {
             hall.setNumber(number);
         }
 
-        Integer capacity = hallRequest.capacity();
-        if(capacity != null){
-            hall.setCapacity(capacity);
+        Integer newCapacity = hallRequest.capacity();
+        if (newCapacity != null) {
+            Integer oldCapacity = hall.getCapacity();
+            if (newCapacity > oldCapacity) {
+                for (int seatNumber = oldCapacity + 1; seatNumber <= newCapacity; seatNumber++){
+                    seatService.createByHall(seatNumber, hall);
+                }
+            } else if (newCapacity < oldCapacity) {
+                seatService.deleteByHallAndNumberGreaterThan(hall, newCapacity);
+            }
+            hall.setCapacity(newCapacity);
         }
-        hallRepository.save(hall);
-
-        List<Integer> seatNumbers = hallRequest.seatsNumbers();
-        if(seatNumbers != null && !seatNumbers.isEmpty()){
-            seatService.deleteByHall(hall);
-            seatService.createByHall(seatNumbers, hall);
-        }
-        return hall;
+        return hallRepository.save(hall);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public void delete(Hall hall) {
         hallRepository.delete(hall);

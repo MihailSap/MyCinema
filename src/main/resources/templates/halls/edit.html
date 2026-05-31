@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование зала</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Редактирование зала</h1>
+<form th:action="@{/halls/{id}/edit(id=${hallId})}" th:object="${hall}" method="post">
+    <div>
+        <label>Номер зала:</label>
+        <input type="number" th:field="*{number}">
+    </div>
+    <br>
+    <div>
+        <label>Вместимость:</label>
+        <input type="number" th:field="*{capacity}">
+    </div>
+    <br>
+    <button type="submit">СОХРАНИТЬ</button>
+</form>
+<br>
+</body>
+</html>

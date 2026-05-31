@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Профиль пользователя</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Профиль пользователя</h1>
+<p>ID: <span th:text="${person.id}"></span></p>
+<p>Логин: <span th:text="${person.login}"></span></p>
+<p>Имя: <span th:text="${person.name}"></span></p>
+<p>Фамилия: <span th:text="${person.surname}"></span></p>
+<p>Роль: <span th:text="${person.role}"></span></p>
+<p>Баланс: <span th:text="${person.balance}"></span></p>
+<p>Статус: <span th:text="${person.accountStatus}"></span></p>
+<br>
+</body>
+</html>

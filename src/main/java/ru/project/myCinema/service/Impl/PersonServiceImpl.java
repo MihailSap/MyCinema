@@ -77,7 +77,7 @@ public class PersonServiceImpl implements PersonService {
     public Person update(UpdatePersonRequest updatePersonRequest, Person person) {
         String login = updatePersonRequest.login();
         if(login != null && !login.isEmpty()) {
-            if(isExistsByLogin(login)) {
+            if(isExistsByLogin(login) && !person.getLogin().equals(login)) {
                throw new RuntimeException("Пользователь с login=%s уже существует".formatted(login));
             }
             person.setLogin(login);
@@ -146,5 +146,11 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public void delete(Person person) {
         personRepository.delete(person);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long getPersonsCount() {
+        return personRepository.count();
     }
 }

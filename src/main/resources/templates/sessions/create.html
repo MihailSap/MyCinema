@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание сеанса</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Создание сеанса</h1>
+<form th:action="@{/sessions/new}" th:object="${session}" method="post">
+    <div>
+        <label>Цена билета:</label>
+        <input type="number" step="0.01" th:field="*{ticketPrice}">
+    </div>
+    <br>
+    <div>
+        <label>Дата и время:</label>
+        <input type="datetime-local" th:field="*{startDateTime}">
+    </div>
+    <br>
+    <div>
+        <label>Фильм:</label>
+        <select th:field="*{movieId}">
+            <option th:each="movie : ${movies}" th:value="${movie.id}" th:text="${movie.title}">
+            </option>
+        </select>
+    </div>
+    <br>
+    <div>
+        <label>Зал:</label>
+        <select th:field="*{hallId}">
+            <option th:each="hall : ${halls}" th:value="${hall.id}" th:text="${hall.number}">
+            </option>
+        </select>
+    </div>
+    <br>
+    <button type="submit">СОЗДАТЬ</button>
+</form>
+<br>
+</body>
+</html>

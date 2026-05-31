@@ -1,90 +1,133 @@
 package ru.project.myCinema.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.HallRequest;
 import ru.project.myCinema.dto.HallResponse;
+import ru.project.myCinema.dto.SessionResponseDto;
 import ru.project.myCinema.mapper.HallMapper;
-import ru.project.myCinema.mapper.SeatMapper;
+import ru.project.myCinema.mapper.SessionMapper;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.model.Seat;
+import ru.project.myCinema.model.Session;
 import ru.project.myCinema.service.HallService;
-import ru.project.myCinema.service.SeatService;
+import ru.project.myCinema.service.SessionService;
 
 import java.util.List;
 
 /**
- * Контроллер для управления залами
+ * Контроллер для работы с залами
  */
-@RestController
-@RequestMapping("/api/halls")
+@Controller
+@RequestMapping("/halls")
 public class HallController {
 
     private final HallService hallService;
     private final HallMapper hallMapper;
-    private final SeatService seatService;
-    private final SeatMapper seatMapper;
+    private final SessionService sessionService;
+    private final SessionMapper sessionMapper;
 
-    @Autowired
     public HallController(
             HallService hallService,
             HallMapper hallMapper,
-            SeatService seatService,
-            SeatMapper seatMapper) {
+            SessionService sessionService,
+            SessionMapper sessionMapper
+    ) {
         this.hallService = hallService;
         this.hallMapper = hallMapper;
-        this.seatService = seatService;
-        this.seatMapper = seatMapper;
+        this.sessionService = sessionService;
+        this.sessionMapper = sessionMapper;
     }
 
     /**
-     * Получение зала по id
-     */
-    @GetMapping("/{hallId}")
-    public HallResponse getById(@PathVariable("hallId") Long hallId){
-        Hall hall = hallService.getById(hallId);
-        return hallMapper.mapToHallResponse(hall);
-    }
-
-    /**
-     * Получение всех залов
+     * Страница с залами
      */
     @GetMapping
-    public List<HallResponse> getHalls(){
+    public String halls(Model model) {
         List<Hall> halls = hallService.getAllHalls();
-        return hallMapper.mapToHallResponses(halls);
+        List<HallResponse> hallResponses = hallMapper.mapToHallResponses(halls);
+        model.addAttribute("halls", hallResponses);
+        return "halls/list";
     }
 
     /**
-     * Получение номеров мест в зале
+     * Страница конкретного зала
      */
-    @GetMapping("/{hallId}/seats")
-    public List<Integer> getSeatsNumbers(@PathVariable("hallId") Long hallId){
-        Hall hall = hallService.getById(hallId);
-        List<Seat> seats = seatService.getSeatsByHall(hall);
-        return seatMapper.mapToSeatsNumbers(seats);
+    @GetMapping("/{id}")
+    public String hall(@PathVariable("id") Long id, Model model) {
+        Hall hall = hallService.getById(id);
+        HallResponse hallResponse = hallMapper.mapToHallResponse(hall);
+        model.addAttribute("hall", hallResponse);
+
+        List<Session> actualSessions = sessionService.getActualByHall(hall);
+        List<SessionResponseDto> sessionResponseDtos = sessionMapper.mapToSessionResponseDtos(actualSessions);
+        model.addAttribute("sessions", sessionResponseDtos);
+
+        return "halls/details";
+    }
+
+    /**
+     * Страница создания зала
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/new")
+    public String createPage(Model model) {
+        model.addAttribute("hall", new HallRequest(null, null, List.of()));
+        return "halls/create";
     }
 
     /**
      * Создание зала
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public HallResponse create(@RequestBody HallRequest hallRequest){
+    @PostMapping("/new")
+    public String create(@ModelAttribute HallRequest hallRequest) {
         Hall hall = hallService.create(hallRequest);
-        return hallMapper.mapToHallResponse(hall);
+        return "redirect:/halls/" + hall.getId();
+    }
+
+    /**
+     * Страница редактирования зала
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}/edit")
+    public String editPage(@PathVariable("id") Long id, Model model) {
+        Hall hall = hallService.getById(id);
+        HallRequest request = new HallRequest(
+                hall.getNumber(),
+                hall.getCapacity(),
+                hall.getSeats()
+                        .stream()
+                        .map(Seat::getNumber)
+                        .toList()
+        );
+
+        model.addAttribute("hallId", id);
+        model.addAttribute("hall", request);
+        return "halls/edit";
+    }
+
+    /**
+     * Редактирование зала
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/edit")
+    public String edit(@PathVariable("id") Long id, @ModelAttribute HallRequest hallRequest) {
+        Hall hall = hallService.getById(id);
+        hallService.update(hallRequest, hall);
+        return "redirect:/halls/" + id;
     }
 
     /**
      * Удаление зала
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{hallId}")
-    public DefaultResponse delete(@PathVariable("hallId") Long hallId){
-        Hall hall = hallService.getById(hallId);
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable("id") Long id) {
+        Hall hall = hallService.getById(id);
         hallService.delete(hall);
-        return new DefaultResponse("Зал с id=%s удален".formatted(hallId));
+        return "redirect:/admin";
     }
 }

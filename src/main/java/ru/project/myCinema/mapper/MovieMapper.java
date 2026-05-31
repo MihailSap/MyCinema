@@ -32,7 +32,7 @@ public class MovieMapper {
                 movie.getId(),
                 movie.getTitle(),
                 movie.getAgeRating(),
-                movie.getMinutesCount()
+                movie.getMinutesLength()
         );
     }
 }
