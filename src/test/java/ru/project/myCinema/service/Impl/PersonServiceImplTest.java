@@ -18,6 +18,9 @@ import ru.project.myCinema.service.PersonService;
 
 import java.util.List;
 
+/**
+ * Тесты сервиса для работы с пользователем
+ */
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")

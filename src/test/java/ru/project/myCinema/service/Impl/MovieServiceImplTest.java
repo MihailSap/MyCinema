@@ -14,6 +14,9 @@ import ru.project.myCinema.service.MovieService;
 
 import java.util.List;
 
+/**
+ * Тесты сервиса для работы с фильмом
+ */
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")

@@ -13,6 +13,9 @@ import ru.project.myCinema.service.SeatService;
 
 import java.util.List;
 
+/**
+ * Тесты сервиса для работы с местом
+ */
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")

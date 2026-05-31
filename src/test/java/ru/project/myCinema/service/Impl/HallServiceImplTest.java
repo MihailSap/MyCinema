@@ -15,6 +15,9 @@ import ru.project.myCinema.service.HallService;
 
 import java.util.List;
 
+/**
+ * Тесты сервиса для работы с залом
+ */
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")

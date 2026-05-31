@@ -19,6 +19,9 @@ import ru.project.myCinema.service.SessionService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Тесты сервиса для работы с сеансом
+ */
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
