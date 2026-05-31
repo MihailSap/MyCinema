@@ -1,5 +1,7 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.booking.BookingCreateRequest;
@@ -11,9 +13,7 @@ import ru.project.myCinema.service.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Контроллер для управления заказами
- */
+@Tag(name = "Эндпоинты для управления заказами")
 @RestController
 @RequestMapping("/api/bookings")
 public class ApiBookingController {
@@ -42,18 +42,14 @@ public class ApiBookingController {
         this.bookingMapper = bookingMapper;
     }
 
-    /**
-     * Получение заказа по id
-     */
+    @Operation(description = "Получение заказа по id")
     @GetMapping("/{bookingId}")
     public BookingResponse getById(@PathVariable("bookingId") Long bookingId){
         Booking booking = bookingService.getById(bookingId);
         return bookingMapper.mapToBookingResponse(booking);
     }
 
-    /**
-     * Создание заказа
-     */
+    @Operation(description = "Создание заказа")
     @PostMapping
     public BookingResponse create(@RequestBody BookingCreateRequest bookingCreateRequest){
         Person person = authService.getAuthenticatedPerson();
@@ -73,9 +69,7 @@ public class ApiBookingController {
         return bookingMapper.mapToBookingResponse(booking);
     }
 
-    /**
-     * Получение всех неоплаченных заказов авторизованного пользователя
-     */
+    @Operation(description = "Получение всех неоплаченных заказов авторизованного пользователя")
     @GetMapping("/actual/pending")
     public List<BookingResponse> getMyPendingActual(){
         Person person = authService.getAuthenticatedPerson();
@@ -83,9 +77,7 @@ public class ApiBookingController {
         return bookingMapper.mapToBookingResponses(bookings);
     }
 
-    /**
-     * Получение всех оплаченных заказов авторизованного пользователя
-     */
+    @Operation(description = "Получение всех оплаченных заказов авторизованного пользователя")
     @GetMapping("/actual/done")
     public List<BookingResponse> getMyDoneActual(){
         Person person = authService.getAuthenticatedPerson();
@@ -93,9 +85,7 @@ public class ApiBookingController {
         return bookingMapper.mapToBookingResponses(bookings);
     }
 
-    /**
-     * Оплата заказа
-     */
+    @Operation(description = "Оплата заказа")
     @PatchMapping("/{bookingId}/pay")
     public BookingResponse pay(@PathVariable("bookingId") Long bookingId){
         Person person = authService.getAuthenticatedPerson();
@@ -110,9 +100,7 @@ public class ApiBookingController {
         return bookingMapper.mapToBookingResponse(updatedBooking);
     }
 
-    /**
-     * Отмена заказа
-     */
+    @Operation(description = "Отмена заказа")
     @PatchMapping("/{bookingId}/cancel")
     public BookingResponse cancel(@PathVariable("bookingId") Long bookingId){
         Booking booking = bookingService.getById(bookingId);

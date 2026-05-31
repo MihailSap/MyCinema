@@ -1,5 +1,7 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,9 +18,7 @@ import ru.project.myCinema.service.PersonService;
 
 import java.util.List;
 
-/**
- * Контроллер для работы с данными пользователей
- */
+@Tag(name = "Эндпоинты для работы с данными пользователей")
 @RestController
 @RequestMapping("/api/persons")
 public class ApiPersonController {
@@ -38,18 +38,14 @@ public class ApiPersonController {
         this.personMapper = personMapper;
     }
 
-    /**
-     * Получение данных текущего пользователя
-     */
+    @Operation(description = "Получение данных текущего пользователя")
     @GetMapping("/me")
     public PersonResponse getCurrentPerson() {
         Person person = authService.getAuthenticatedPerson();
         return personMapper.mapToPersonResponse(person);
     }
 
-    /**
-     * Получение данных всех существующих пользователей
-     */
+    @Operation(description = "Получение данных всех существующих пользователей")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<PersonResponse> getAllPersons() {
@@ -57,18 +53,14 @@ public class ApiPersonController {
         return personMapper.mapToPersonResponses(persons);
     }
 
-    /**
-     * Получение данных пользователя по его id
-     */
+    @Operation(description = "Получение данных пользователя по его id")
     @GetMapping("/{personId}")
     public PersonResponse getPersonById(@PathVariable("personId") Long personId) {
         Person person = personService.getById(personId);
         return personMapper.mapToPersonResponse(person);
     }
 
-    /**
-     * Обновление данных авторизованного пользователя
-     */
+    @Operation(description = "Обновление данных авторизованного пользователя")
     @PatchMapping("/me")
     public PersonResponse update(@RequestBody UpdatePersonRequest updatePersonRequest){
         Person person = authService.getAuthenticatedPerson();
@@ -76,9 +68,7 @@ public class ApiPersonController {
         return personMapper.mapToPersonResponse(updatedPerson);
     }
 
-    /**
-     * Выход с последующим удалением аккаунта авторизованного пользователя
-     */
+    @Operation(description = "Выход с последующим удалением аккаунта авторизованного пользователя")
     @DeleteMapping("/me")
     public DefaultResponse delete(HttpSession session){
         Person person = authService.getAuthenticatedPerson();
@@ -87,19 +77,18 @@ public class ApiPersonController {
         return new DefaultResponse("Вы удалили свой аккаунт");
     }
 
-    /**
-     * Пополнение баланса авторизованного пользователя
-     */
+    @Operation(description = "Пополнение баланса авторизованного пользователя")
     @PostMapping("/me/balance")
     public PersonResponse topUpBalance(@RequestBody TopUpBalanceRequest topUpBalanceRequest){
+        if(topUpBalanceRequest.amount() <= 0){
+            throw new RuntimeException("Сумма для пополнения баланса должна быть больше нуля");
+        }
         Person person = authService.getAuthenticatedPerson();
         Person updatedPerson = personService.topUpBalance(person, topUpBalanceRequest.amount());
         return personMapper.mapToPersonResponse(updatedPerson);
     }
 
-    /**
-     * Блокировка пользователя по id
-     */
+    @Operation(description = "Блокировка пользователя по id")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{personId}/block")
     public PersonResponse block(@PathVariable("personId") Long personId){
@@ -111,9 +100,7 @@ public class ApiPersonController {
         return personMapper.mapToPersonResponse(updatedPerson);
     }
 
-    /**
-     * Разблокировка пользователя по id
-     */
+    @Operation(description = "Разблокировка пользователя по id")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{personId}/unblock")
     public PersonResponse unblock(@PathVariable("personId") Long personId){
@@ -125,9 +112,7 @@ public class ApiPersonController {
         return personMapper.mapToPersonResponse(updatedPerson);
     }
 
-    /**
-     * Обновление роли пользователя
-     */
+    @Operation(description = "Обновление роли пользователя")
     @PatchMapping("/me/role")
     public PersonResponse changeRole(){
         Person person = authService.getAuthenticatedPerson();

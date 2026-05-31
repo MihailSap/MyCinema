@@ -1,5 +1,7 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +24,7 @@ import ru.project.myCinema.service.SessionService;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Контроллер для управления сеансами
- */
+@Tag(name = "Эндпоинты для управления сеансами")
 @RestController
 @RequestMapping("/api/sessions")
 public class ApiSessionController {
@@ -53,18 +53,14 @@ public class ApiSessionController {
         this.seatService = seatService;
     }
 
-    /**
-     * Получение сеанса по id
-     */
+    @Operation(description = "Получение сеанса по id")
     @GetMapping("/{sessionId}")
     public SessionResponse getById(@PathVariable("sessionId") Long sessionId){
         Session session = sessionService.getById(sessionId);
         return sessionMapper.mapToSessionResponse(session);
     }
 
-    /**
-     * Получение мест с их статусом по сеансу
-     */
+    @Operation(description = "Получение мест с их статусом по сеансу")
     @GetMapping("/{sessionId}/seats")
     public List<SeatResponse> getSeatsBySessionId(@PathVariable("sessionId") Long sessionId){
         Session session = sessionService.getById(sessionId);
@@ -76,18 +72,14 @@ public class ApiSessionController {
         return seatResponses;
     }
 
-    /**
-     * Получение предстоящих сеансов
-     */
+    @Operation(description = "Получение предстоящих сеансов")
     @GetMapping("/actual")
     public List<SessionResponseDto> getAllActual(){
         List<Session> sessions = sessionService.getActualSessions();
         return sessionMapper.mapToSessionResponseDtos(sessions);
     }
 
-    /**
-     * Получение всех предстоящих сеансов фильма
-     */
+    @Operation(description = "Получение всех предстоящих сеансов фильма")
     @GetMapping("/actual/by-movie/{movieId}")
     public List<SessionResponse> getAllActualByMovie(@PathVariable("movieId") Long movieId){
         Movie movie = movieService.getById(movieId);
@@ -95,9 +87,7 @@ public class ApiSessionController {
         return sessionMapper.mapToSessionResponses(sessions);
     }
 
-    /**
-     * Получение всех предстоящих сеансов в зале
-     */
+    @Operation(description = "Получение всех предстоящих сеансов в зале")
     @GetMapping("/actual/by-hall/{hallId}")
     public List<SessionResponse> getAllActualByHall(@PathVariable("hallId") Long hallId){
         Hall hall = hallService.getById(hallId);
@@ -105,9 +95,7 @@ public class ApiSessionController {
         return sessionMapper.mapToSessionResponses(sessions);
     }
 
-    /**
-     * Создание сеанса
-     */
+    @Operation(description = "Создание сеанса")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public SessionResponse create(@RequestBody SessionRequest sessionRequest){
@@ -117,9 +105,7 @@ public class ApiSessionController {
         return sessionMapper.mapToSessionResponse(session);
     }
 
-    /**
-     * Редактирование данных сеанса
-     */
+    @Operation(description = "Редактирование данных сеанса")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{sessionId}")
     public SessionResponse update(
@@ -131,9 +117,7 @@ public class ApiSessionController {
         return sessionMapper.mapToSessionResponse(updatedSession);
     }
 
-    /**
-     * Смена зала, в котором будет проходить сеанс
-     */
+    @Operation(description = "Смена зала, в котором будет проходить сеанс")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{sessionId}/hall")
     public SessionResponse updateHall(
@@ -146,9 +130,7 @@ public class ApiSessionController {
         return sessionMapper.mapToSessionResponse(updatedSession);
     }
 
-    /**
-     * Смена фильма, который будет показан на сеансе
-     */
+    @Operation(description = "Смена фильма, который будет показан на сеансе")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{sessionId}/movie")
     public SessionResponse updateMovie(
@@ -161,9 +143,7 @@ public class ApiSessionController {
         return sessionMapper.mapToSessionResponse(updatedSession);
     }
 
-    /**
-     * Удаление сеанса
-     */
+    @Operation(description = "Удаление сеанса")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{sessionId}")
     public DefaultResponse delete(@PathVariable("sessionId") Long sessionId){
