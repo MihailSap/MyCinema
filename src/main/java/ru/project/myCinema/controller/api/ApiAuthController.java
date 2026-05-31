@@ -1,5 +1,7 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,9 +13,7 @@ import ru.project.myCinema.model.Person;
 import ru.project.myCinema.service.AuthService;
 import ru.project.myCinema.service.PersonService;
 
-/**
- * Контроллер с эндпоинтами для регистрации, входа и выхода пользователя
- */
+@Tag(name = "Эндпоинты для регистрации, входа и выхода")
 @RestController
 @RequestMapping("/api/auth")
 public class ApiAuthController {
@@ -27,9 +27,7 @@ public class ApiAuthController {
         this.personService = personService;
     }
 
-    /**
-     * Регистрация нового пользователя
-     */
+    @Operation(description = "Регистрация нового пользователя")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     public DefaultResponse register(@RequestBody AuthRequest authRequest){
@@ -40,9 +38,7 @@ public class ApiAuthController {
         return new DefaultResponse("Регистрация прошла успешно");
     }
 
-    /**
-     * Вход в аккаунт
-     */
+    @Operation(description = "Вход в аккаунт")
     @PostMapping("/login")
     public DefaultResponse login(@RequestBody AuthRequest authRequest, HttpSession session){
         UsernamePasswordAuthenticationToken authenticationInputToken = new UsernamePasswordAuthenticationToken(
@@ -53,9 +49,7 @@ public class ApiAuthController {
         return new DefaultResponse("Добро пожаловать, %s".formatted(person.getLogin()));
     }
 
-    /**
-     * Выход из аккаунта
-     */
+    @Operation(description = "Выход из аккаунта")
     @PostMapping("/logout")
     public DefaultResponse logout(HttpSession session){
         authService.logout(session);

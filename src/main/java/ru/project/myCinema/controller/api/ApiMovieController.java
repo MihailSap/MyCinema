@@ -1,5 +1,7 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,9 +15,7 @@ import ru.project.myCinema.service.MovieService;
 
 import java.util.List;
 
-/**
- * Контроллер для работы с фильмами
- */
+@Tag(name = "Эндпоинты для работы с фильмами")
 @RestController
 @RequestMapping("/api/movies")
 public class ApiMovieController {
@@ -32,27 +32,21 @@ public class ApiMovieController {
         this.movieMapper = movieMapper;
     }
 
-    /**
-     * Получение данных фильма по id
-     */
+    @Operation(description = "Получение данных фильма по id")
     @GetMapping("/{movieId}")
     public MovieResponse getById(@PathVariable("movieId") Long movieId){
         Movie movie = movieService.getById(movieId);
         return movieMapper.mapToMovieResponse(movie);
     }
 
-    /**
-     * Получение всех фильмов
-     */
+    @Operation(description = "Получение всех фильмов")
     @GetMapping
     public List<MovieResponse> getAllMovies(){
         List<Movie> movies = movieService.getAllMovies();
         return movieMapper.mapToMovieResponses(movies);
     }
 
-    /**
-     * Создание нового фильма
-     */
+    @Operation(description = "Создание нового фильма")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -61,9 +55,7 @@ public class ApiMovieController {
         return movieMapper.mapToMovieResponse(movie);
     }
 
-    /**
-     * Редактирование существующего фильма по id
-     */
+    @Operation(description = "Редактирование фильма по id")
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{movieId}")
     public MovieResponse update(
@@ -78,6 +70,7 @@ public class ApiMovieController {
     /**
      * Удаление фильма по id
      */
+    @Operation(description = "Удаление фильма по id")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{movieId}")
     public DefaultResponse delete(@PathVariable("movieId") Long movieId){

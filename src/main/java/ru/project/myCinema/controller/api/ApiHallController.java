@@ -1,5 +1,7 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,7 @@ import ru.project.myCinema.service.SeatService;
 
 import java.util.List;
 
-/**
- * Контроллер для управления залами
- */
+@Tag(name = "Эндпоинты для управления залами")
 @RestController
 @RequestMapping("/api/halls")
 public class ApiHallController {
@@ -39,27 +39,21 @@ public class ApiHallController {
         this.seatMapper = seatMapper;
     }
 
-    /**
-     * Получение зала по id
-     */
+    @Operation(description = "Получение зала по id")
     @GetMapping("/{hallId}")
     public HallResponse getById(@PathVariable("hallId") Long hallId){
         Hall hall = hallService.getById(hallId);
         return hallMapper.mapToHallResponse(hall);
     }
 
-    /**
-     * Получение всех залов
-     */
+    @Operation(description = "Получение всех залов")
     @GetMapping
     public List<HallResponse> getHalls(){
         List<Hall> halls = hallService.getAllHalls();
         return hallMapper.mapToHallResponses(halls);
     }
 
-    /**
-     * Получение номеров мест в зале
-     */
+    @Operation(description = "Получение номеров мест в зале")
     @GetMapping("/{hallId}/seats")
     public List<Integer> getSeatsNumbers(@PathVariable("hallId") Long hallId){
         Hall hall = hallService.getById(hallId);
@@ -67,9 +61,7 @@ public class ApiHallController {
         return seatMapper.mapToSeatsNumbers(seats);
     }
 
-    /**
-     * Создание зала
-     */
+    @Operation(description = "Создание зала")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public HallResponse create(@RequestBody HallRequest hallRequest){
@@ -77,9 +69,7 @@ public class ApiHallController {
         return hallMapper.mapToHallResponse(hall);
     }
 
-    /**
-     * Удаление зала
-     */
+    @Operation(description = "Удаление зала")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{hallId}")
     public DefaultResponse delete(@PathVariable("hallId") Long hallId){

@@ -1,11 +1,10 @@
 package ru.project.myCinema.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.report.ReportResponse;
 import ru.project.myCinema.mapper.ReportMapper;
 import ru.project.myCinema.model.Report;
@@ -13,8 +12,9 @@ import ru.project.myCinema.service.ReportService;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/reports")
+@Tag(name = "Эндпоинты для многопоточной работы с отчётами")
+@RestController
+@RequestMapping("/api/reports")
 public class ApiReportController {
 
     private final ReportService reportService;
@@ -26,9 +26,7 @@ public class ApiReportController {
         this.reportMapper = reportMapper;
     }
 
-    /**
-     * Создание и запуск формирования содержимого отчёта
-     */
+    @Operation(description = "Создание и запуск формирования содержимого отчёта")
     @PostMapping
     public Long createAndGenerateReport() {
         Long reportId = reportService.create();
@@ -36,17 +34,13 @@ public class ApiReportController {
         return reportId;
     }
 
-    /**
-     * Получение содержимого отчёта по его {@code id}
-     */
+    @Operation(description = "Получение содержимого отчёта по его id")
     @GetMapping("/{id}")
     public String getContent(@PathVariable("id") Long id) {
         return reportService.getContent(id);
     }
 
-    /**
-     * Получение данных всех отчётов
-     */
+    @Operation(description = "Получение данных всех отчётов")
     @GetMapping
     public List<ReportResponse> getReports() {
         List<Report> reports = reportService.getReports();
