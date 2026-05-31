@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Панель администратора</title></head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Панель администратора</h1>
+<h2>Пользователи</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Логин</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Роль</th>
+        <th>Баланс</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="person : ${persons}">
+        <td th:text="${person.id}"></td>
+        <td>
+            <a th:href="@{'/admin/' + ${person.id}}" th:text="${person.login}">
+            </a>
+        </td>
+        <td th:text="${person.name}"></td>
+        <td th:text="${person.surname}"></td>
+        <td th:text="${person.role}"></td>
+        <td th:text="${person.balance}"></td>
+        <td th:text="${person.accountStatus}"></td>
+        <td>
+            <form th:if="${person.accountStatus.name() == 'ACTIVE'}" th:action="@{'/admin/' + ${person.id} + '/block'}" method="post">
+                <button type="submit">ЗАБЛОКИРОВАТЬ</button>
+            </form>
+            <form th:if="${person.accountStatus.name() == 'BLOCKED'}" th:action="@{'/admin/' + ${person.id} + '/unblock'}" method="post">
+                <button type="submit">РАЗБЛОКИРОВАТЬ</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>Залы</h2>
+<p><a th:href="@{/halls/new}">Создать зал</a></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Номер</th>
+        <th>Вместимость</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="hall : ${halls}">
+        <td th:text="${hall.id}"></td>
+        <td><a th:href="@{'/halls/' + ${hall.id}}" th:text="${hall.number}"></a></td>
+        <td th:text="${hall.capacity}"></td>
+        <td>
+            <a th:href="@{'/halls/' + ${hall.id} + '/edit'}">РЕДАКТИРОВАТЬ</a>
+            <form th:action="@{'/halls/' + ${hall.id} + '/delete'}" method="post" style="display:inline">
+                <button type="submit">УДАЛИТЬ</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>Фильмы</h2>
+<p><a th:href="@{/movies/new}">Создать фильм</a></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Возрастной рейтинг</th>
+        <th>Длительность</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="movie : ${movies}">
+        <td th:text="${movie.id}"></td>
+        <td><a th:href="@{'/movies/' + ${movie.id}}" th:text="${movie.title}"></a></td>
+        <td th:text="${movie.ageRating}"></td>
+        <td th:text="${movie.minutesLength}"></td>
+        <td>
+            <a th:href="@{'/movies/' + ${movie.id} + '/edit'}">РЕДАКТИРОВАТЬ</a>
+            <form th:action="@{'/movies/' + ${movie.id}}" method="post" style="display:inline">
+                <button type="submit">УДАЛИТЬ</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h2>Сеансы</h2>
+<p><a th:href="@{/sessions/new}">Создать сеанс</a></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Фильм</th>
+        <th>Зал</th>
+        <th>Дата и время</th>
+        <th>Цена билета</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="s : ${sessions}">
+        <td th:text="${s.id}"></td>
+        <td th:text="${s.movieTitle}"></td>
+        <td th:text="${s.hallNumber}"></td>
+        <td th:text="${s.startDateTime}"></td>
+        <td th:text="${s.ticketPrice}"></td>
+        <td>
+            <a th:href="@{'/sessions/' + ${s.id} + '/edit'}">РЕДАКТИРОВАТЬ</a>
+            <form th:action="@{'/sessions/' + ${s.id} + '/delete'}" method="post" style="display:inline">
+                <button type="submit">УДАЛИТЬ</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<p><a th:href="@{/admin/reports}">Управление отчётами</a></p>
+<p><a href="/monitoring" target="_blank">Мониторинг в Java Melody</a></p>
+</body>
+</html>

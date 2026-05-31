@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-create-report
+      author: SapeginMihail
+      changes:
+        - createTable:
+            tableName: report
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_report
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+              - column:
+                  name: content
+                  type: TEXT

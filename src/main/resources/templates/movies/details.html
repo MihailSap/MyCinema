@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Фильм</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Информация о фильме</h1>
+<table border="1" cellpadding="8">
+    <tr>
+        <th>ID</th>
+        <td th:text="${movie.id}"></td>
+    </tr>
+    <tr>
+        <th>Название</th>
+        <td th:text="${movie.title}"></td>
+    </tr>
+    <tr>
+        <th>Возрастной рейтинг</th>
+        <td th:text="${movie.ageRating}"></td>
+    </tr>
+    <tr>
+        <th>Длительность</th>
+        <td th:text="${movie.minutesLength + ' мин'}"></td>
+    </tr>
+</table>
+<h2>Актуальные сеансы</h2>
+<div th:if="${#lists.isEmpty(sessions)}">
+    Для этого фильма пока нет запланированных сеансов.
+</div>
+<table border="1" cellpadding="8" th:if="${!#lists.isEmpty(sessions)}">
+    <tr>
+        <th>ID</th>
+        <th>Зал</th>
+        <th>Цена</th>
+        <th>Время начала</th>
+    </tr>
+    <tr th:each="s : ${sessions}">
+        <td>
+            <a th:href="@{/sessions/{id}(id=${s.id()})}" th:text="${s.id()}"></a>
+        </td>
+        <td>
+            <a th:href="@{/halls/{id}(id=${s.hallId()})}" th:text="${s.hallNumber()}"></a>
+        </td>
+        <td th:text="${s.ticketPrice()}"></td>
+        <td th:text="${s.startDateTime()}"></td>
+        <td>
+            <a th:href="@{/bookings/new(sessionId=${s.id})}">Создать заказ</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

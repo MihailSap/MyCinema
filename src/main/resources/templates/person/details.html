@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Профиль</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<a th:href="@{/sessions/actual}">Актуальные сеансы</a>
+<h1>Профиль пользователя</h1>
+<p>ID:
+    <span th:text="${person.id}"></span>
+</p>
+<p>Логин:
+    <span th:text="${person.login}"></span>
+</p>
+<p>Имя:
+    <span th:text="${person.name}"></span>
+</p>
+<p>Фамилия:
+    <span th:text="${person.surname}"></span>
+</p>
+<p>Роль:
+    <span th:text="${person.role}"></span>
+<form th:action="@{/persons/me/role}" method="post" style="display:inline;">
+    <button type="submit">СМЕНИТЬ РОЛЬ</button>
+</form>
+</p>
+<p>Баланс:
+    <span th:text="${person.balance}"></span>
+</p>
+<a th:href="@{/persons/me/balance}">Пополнить баланс</a>
+<br><br>
+<a th:href="@{/persons/me/update}">Обновить профиль</a>
+<br><br>
+<div th:if="${person.role.name() == 'ADMIN'}">
+    <form th:action="@{/auth/logout}" method="post">
+        <button type="submit">Выйти</button>
+    </form>
+</div>
+<h2>Неоплаченные заказы</h2>
+<table border="1">
+    <tr>
+        <th>Дата</th>
+        <th>Фильм</th>
+        <th>Места</th>
+        <th>Статус</th>
+        <th>Действия</th>
+    </tr>
+    <tr th:each="booking : ${pendingBookings}">
+        <td th:text="${booking.createdAt}"></td>
+        <td th:text="${booking.sessionResponse.movie.title}"></td>
+        <td th:text="${booking.seatsNumbers}"></td>
+        <td th:text="${booking.status}"></td>
+        <td>
+            <form th:action="@{/bookings/{id}/pay(id=${booking.id})}" method="post">
+                <button type="submit">Оплатить</button>
+            </form>
+            <form th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
+                <button type="submit">Отменить</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<h2>Оплаченные заказы</h2>
+<table border="1">
+    <tr>
+        <th>Дата</th>
+        <th>Фильм</th>
+        <th>Места</th>
+        <th>Статус</th>
+    </tr>
+    <tr th:each="booking : ${doneBookings}">
+        <td th:text="${booking.createdAt}"></td>
+        <td th:text="${booking.sessionResponse.movie.title}"></td>
+        <td th:text="${booking.seatsNumbers}"></td>
+        <td th:text="${booking.status}"></td>
+    </tr>
+</table>
+</body>
+</html>

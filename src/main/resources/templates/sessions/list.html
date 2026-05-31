@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Актуальные сеансы</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Актуальные сеансы</h1>
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Фильм</th>
+        <th>Зал</th>
+        <th>Цена</th>
+        <th>Время начала</th>
+        <th>Заказ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="s : ${sessions}">
+        <td>
+            <a th:href="@{/sessions/{id}(id=${s.id()})}" th:text="${s.id()}"></a>
+        </td>
+        <td>
+            <a th:href="@{/movies/{id}(id=${s.movieId()})}" th:text="${s.movieTitle()}"></a>
+        </td>
+        <td>
+            <a th:href="@{/halls/{id}(id=${s.hallId()})}" th:text="${s.hallNumber()}"></a>
+        </td>
+        <td th:text="${s.ticketPrice()}"></td>
+        <td th:text="${s.startDateTime()}"></td>
+        <td>
+            <a th:href="@{/bookings/new(sessionId=${s.id()})}">Создать заказ</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

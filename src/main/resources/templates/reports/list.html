@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Отчёты</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<h1>Отчёты</h1>
+<form th:action="@{/admin/reports/create}" method="post">
+    <button type="submit">Сформировать отчёт</button>
+</form>
+<br>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Статус</th>
+        <th>Действие</th>
+    </tr>
+    <tr th:each="report : ${reports}">
+        <td th:text="${report.id}"></td>
+        <td th:text="${report.reportStatus()}"></td>
+        <td>
+            <a th:if="${report.reportStatus.name() == 'COMPLETED'}" th:href="@{/admin/reports/{id}(id=${report.id})}">Открыть</a>
+            <span th:if="${report.reportStatus.name() != 'COMPLETED'}">Недоступен</span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

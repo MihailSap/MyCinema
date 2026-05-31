@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Отчёт</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<h1>Содержимое отчёта</h1>
+<div th:utext="${content}">
+</div>
+<br>
+<a th:href="@{/admin/reports}">Назад</a>
+</body>
+</html>

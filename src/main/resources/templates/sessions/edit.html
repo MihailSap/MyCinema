@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование сеанса</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Редактирование сеанса</h1>
+<form th:action="@{/sessions/{id}/edit(id=${sessionId})}" th:object="${session}" method="post">
+    <div>
+        <label>Цена билета:</label>
+        <input type="number" step="0.01" th:field="*{ticketPrice}">
+    </div>
+    <div>
+        <label>Дата и время:</label>
+        <input type="datetime-local" th:field="*{startDateTime}">
+    </div>
+    <button type="submit">СОХРАНИТЬ</button>
+</form>
+<br>
+</body>
+</html>

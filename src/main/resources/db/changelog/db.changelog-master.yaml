@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/001-create-person-table.yaml
+  - include:
+      file: db/changelog/changeset/002-create-movie-table.yaml
+  - include:
+      file: db/changelog/changeset/003-create-hall-table.yaml
+  - include:
+      file: db/changelog/changeset/004-create-session-table.yaml
+  - include:
+      file: db/changelog/changeset/005-create-seat-table.yaml
+  - include:
+      file: db/changelog/changeset/006-create-booking-table.yaml
+  - include:
+      file: db/changelog/changeset/007-create-booking-seat-table.yaml
+  - include:
+      file: db/changelog/changeset/008-add-balance-and-account-status.yaml
+  - include:
+      file: db/changelog/changeset/009-add-role-to-person.yaml
+  - include:
+      file: db/changelog/changeset/010-update-ticket-price.yaml
+  - include:
+      file: db/changelog/changeset/011-report-create.yaml

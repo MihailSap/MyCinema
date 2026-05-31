@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание заказа</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Создание заказа</h1>
+<form th:action="@{/bookings/new}" method="post">
+    <input type="hidden" name="sessionId" th:value="${sessionId}">
+    <label>Место:</label>
+    <select name="seatId">
+        <option th:each="seat : ${availableSeats}" th:value="${seat.id}" th:text="${seat.number}">
+        </option>
+    </select>
+    <button type="submit">Забронировать</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-hall-table
+      author: SapeginMihail
+      changes:
+        - createTable:
+            tableName: hall
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_hall
+                    nullable: false
+              - column:
+                  name: number
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: capacity
+                  type: integer

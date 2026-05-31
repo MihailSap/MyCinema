@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Зал</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>
+    Зал №<span th:text="${hall.number}"></span>
+</h1>
+<p>
+    Вместимость:
+    <span th:text="${hall.capacity}"></span>
+</p>
+<h3>Места</h3>
+<ul>
+    <li th:each="seat : ${hall.seatsNumbers}"
+        th:text="${seat}">
+    </li>
+</ul>
+<h3>Актуальные сеансы</h3>
+<div th:if="${#lists.isEmpty(sessions)}">
+    В этом зале нет запланированных сеансов.
+</div>
+<table border="1" cellpadding="8"
+       th:if="${!#lists.isEmpty(sessions)}">
+    <tr>
+        <th>ID</th>
+        <th>Фильм</th>
+        <th>Цена</th>
+        <th>Время начала</th>
+    </tr>
+    <tr th:each="s : ${sessions}">
+        <td>
+            <a th:href="@{/sessions/{id}(id=${s.id})}"
+               th:text="${s.id}">
+            </a>
+        </td>
+        <td>
+            <a th:href="@{/movies/{id}(id=${s.movieId})}"
+               th:text="${s.movieTitle}">
+            </a>
+        </td>
+        <td th:text="${s.ticketPrice}"></td>
+        <td th:text="${s.startDateTime}"></td>
+        <td>
+            <a th:href="@{/bookings/new(sessionId=${s.id})}">
+                Создать заказ
+            </a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

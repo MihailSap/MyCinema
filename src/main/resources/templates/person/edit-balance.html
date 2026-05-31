@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пополнение баланса</title>
+</head>
+<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<h1>Пополнение баланса</h1>
+<form th:action="@{/persons/me/balance}" method="post">
+    <div>
+        <label>Введите сумму:</label>
+        <input type="number" step="0.01" min="0" name="amount" required>
+    </div>
+    <button type="submit">Пополнить</button>
+</form>
+<br>
+</body>
+</html>
