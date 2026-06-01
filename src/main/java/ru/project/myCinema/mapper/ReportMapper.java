@@ -19,7 +19,7 @@ public class ReportMapper {
     public List<ReportResponse> mapToReportResponses(List<Report> reports) {
         List<ReportResponse> reportResponses = new ArrayList<>();
         for (Report report : reports) {
-            reportResponses.add(mepToReportResponse(report));
+            reportResponses.add(mapToReportResponse(report));
         }
         return reportResponses;
     }
@@ -27,7 +27,7 @@ public class ReportMapper {
     /**
      * Маппинг Report в список Report
      */
-    public ReportResponse mepToReportResponse(Report report) {
+    private ReportResponse mapToReportResponse(Report report) {
         return new ReportResponse(
                 report.getId(),
                 report.getStatus(),

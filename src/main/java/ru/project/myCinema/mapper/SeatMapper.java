@@ -1,8 +1,8 @@
 package ru.project.myCinema.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.project.myCinema.dto.seat.SeatResponse;
-import ru.project.myCinema.dto.seat.SeatShortResponse;
+import ru.project.myCinema.dto.seat.SeatStatusResponse;
+import ru.project.myCinema.dto.seat.SeatIdResponse;
 import ru.project.myCinema.dto.seat.SeatStatus;
 import ru.project.myCinema.model.Seat;
 
@@ -39,31 +39,31 @@ public class SeatMapper {
     }
 
     /**
-     * Маппинг сущности Seat в SeatResponse
+     * Маппинг сущности Seat в SeatStatusResponse
      */
-    public SeatResponse mapToSeatResponse(Seat seat, boolean isBooked) {
-        return new SeatResponse(
+    public SeatStatusResponse mapToSeatStatusResponse(Seat seat, boolean isBooked) {
+        return new SeatStatusResponse(
                 seat.getNumber(),
                 isBooked ? SeatStatus.TAKEN : SeatStatus.AVAILABLE
         );
     }
 
     /**
-     * Маппинг сущностей Seat в SeatShortResponse
+     * Маппинг сущностей Seat в SeatIdResponse
      */
-    public List<SeatShortResponse> mapToSeatShortResponses(List<Seat> seats) {
-        List<SeatShortResponse> seatShortResponses = new ArrayList<>();
+    public List<SeatIdResponse> mapToSeatIdResponses(List<Seat> seats) {
+        List<SeatIdResponse> seatIdResponses = new ArrayList<>();
         for (Seat seat : seats) {
-            seatShortResponses.add(mapToSeatShortResponse(seat));
+            seatIdResponses.add(mapToSeatIdResponse(seat));
         }
-        return seatShortResponses;
+        return seatIdResponses;
     }
 
     /**
-     * Маппинг сущности Seat в SeatShortResponse
+     * Маппинг сущности Seat в SeatIdResponse
      */
-    public SeatShortResponse mapToSeatShortResponse(Seat seat){
-        return new SeatShortResponse(
+    private SeatIdResponse mapToSeatIdResponse(Seat seat){
+        return new SeatIdResponse(
                 seat.getId(),
                 seat.getNumber()
         );

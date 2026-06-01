@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.*;
-import ru.project.myCinema.dto.seat.SeatResponse;
+import ru.project.myCinema.dto.seat.SeatStatusResponse;
 import ru.project.myCinema.dto.session.SessionRequest;
 import ru.project.myCinema.dto.session.SessionResponse;
 import ru.project.myCinema.dto.session.SessionResponseDto;
@@ -62,14 +62,14 @@ public class ApiSessionController {
 
     @Operation(description = "Получение мест с их статусом по сеансу")
     @GetMapping("/{sessionId}/seats")
-    public List<SeatResponse> getSeatsBySessionId(@PathVariable("sessionId") Long sessionId){
+    public List<SeatStatusResponse> getSeatsBySessionId(@PathVariable("sessionId") Long sessionId){
         Session session = sessionService.getById(sessionId);
-        List<SeatResponse> seatResponses = new ArrayList<>();
+        List<SeatStatusResponse> seatStatusResponses = new ArrayList<>();
         for(Seat seat : session.getHall().getSeats()){
             boolean isSeatBooked = seatService.isSeatBooked(seat, session);
-            seatResponses.add(seatMapper.mapToSeatResponse(seat, isSeatBooked));
+            seatStatusResponses.add(seatMapper.mapToSeatStatusResponse(seat, isSeatBooked));
         }
-        return seatResponses;
+        return seatStatusResponses;
     }
 
     @Operation(description = "Получение предстоящих сеансов")

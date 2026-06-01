@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.hall.HallResponse;
 import ru.project.myCinema.dto.movie.MovieResponse;
-import ru.project.myCinema.dto.seat.SeatResponse;
+import ru.project.myCinema.dto.seat.SeatStatusResponse;
 import ru.project.myCinema.dto.session.SessionRequest;
 import ru.project.myCinema.dto.session.SessionResponseDto;
 import ru.project.myCinema.mapper.HallMapper;
@@ -158,15 +158,15 @@ public class SessionController {
     @GetMapping("/{id}")
     public String sessionPage(@PathVariable("id") Long id, Model model) {
         Session session = sessionService.getById(id);
-        List<SeatResponse> seatResponses = new ArrayList<>();
+        List<SeatStatusResponse> seatStatusResponses = new ArrayList<>();
         for (Seat seat : session.getHall().getSeats()) {
             boolean isSeatBooked = seatService.isSeatBooked(seat, session);
-            SeatResponse seatResponse = seatMapper.mapToSeatResponse(seat, isSeatBooked);
-            seatResponses.add(seatResponse);
+            SeatStatusResponse seatStatusResponse = seatMapper.mapToSeatStatusResponse(seat, isSeatBooked);
+            seatStatusResponses.add(seatStatusResponse);
         }
 
         model.addAttribute("sessionDto", sessionMapper.mapToSessionResponseDto(session));
-        model.addAttribute("seats", seatResponses);
+        model.addAttribute("seats", seatStatusResponses);
         return "sessions/details";
     }
 }
