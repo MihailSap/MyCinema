@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.person.AuthRequest;
 import ru.project.myCinema.dto.person.UpdatePersonRequest;
+import ru.project.myCinema.exception.ConflictException;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.model.PersonAccountStatus;
 import ru.project.myCinema.model.Role;
@@ -55,14 +57,14 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person getById(Long id) {
         return personRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
     @Transactional(readOnly = true)
     @Override
     public Person getByLogin(String login){
         return personRepository.findByLogin(login)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
     @Transactional(readOnly = true)
@@ -78,7 +80,7 @@ public class PersonServiceImpl implements PersonService {
         String login = updatePersonRequest.login();
         if(login != null && !login.isEmpty()) {
             if(isExistsByLogin(login) && !person.getLogin().equals(login)) {
-               throw new RuntimeException("Пользователь с login=%s уже существует".formatted(login));
+               throw new ConflictException("Пользователь с login=%s уже существует".formatted(login));
             }
             person.setLogin(login);
         }
@@ -135,7 +137,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person changeRole(Long personId) {
         Person actualPerson = personRepository.findById(personId)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         actualPerson.setRole(
                 actualPerson.getRole() == Role.USER ? Role.ADMIN : Role.USER
         );

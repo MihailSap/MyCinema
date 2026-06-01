@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.movie.MovieRequest;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Movie;
 import ru.project.myCinema.model.MovieAgeRating;
 import ru.project.myCinema.repository.MovieRepository;
@@ -63,7 +64,7 @@ class MovieServiceImplTest {
      */
     @Test
     void testGetByIdFailure() {
-        Assertions.assertThrows(RuntimeException.class, () -> movieService.getById(999L));
+        Assertions.assertThrows(NotFoundException.class, () -> movieService.getById(999L));
     }
 
     /**

@@ -3,6 +3,7 @@ package ru.project.myCinema.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.*;
 import ru.project.myCinema.repository.BookingRepository;
 import ru.project.myCinema.service.BookingService;
@@ -28,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking getById(Long id) {
         return bookingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Заказ с id=%s не найден".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("Заказ с id=%s не найден".formatted(id)));
     }
 
     @Transactional(readOnly = true)

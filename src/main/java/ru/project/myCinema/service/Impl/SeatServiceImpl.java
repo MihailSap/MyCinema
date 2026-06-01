@@ -3,6 +3,7 @@ package ru.project.myCinema.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.BookingStatus;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.model.Seat;
@@ -29,7 +30,7 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public Seat getById(Long id) {
         return seatRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Место с id=%s не найдено".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("Место с id=%s не найдено".formatted(id)));
     }
 
     @Override

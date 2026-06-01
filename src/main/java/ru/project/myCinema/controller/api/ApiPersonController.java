@@ -10,6 +10,7 @@ import ru.project.myCinema.dto.DefaultResponse;
 import ru.project.myCinema.dto.person.PersonResponse;
 import ru.project.myCinema.dto.person.TopUpBalanceRequest;
 import ru.project.myCinema.dto.person.UpdatePersonRequest;
+import ru.project.myCinema.exception.BadRequestException;
 import ru.project.myCinema.mapper.PersonMapper;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.model.PersonAccountStatus;
@@ -81,7 +82,7 @@ public class ApiPersonController {
     @PostMapping("/me/balance")
     public PersonResponse topUpBalance(@RequestBody TopUpBalanceRequest topUpBalanceRequest){
         if(topUpBalanceRequest.amount() <= 0){
-            throw new RuntimeException("Сумма для пополнения баланса должна быть больше нуля");
+            throw new BadRequestException("Сумма для пополнения баланса должна быть больше нуля");
         }
         Person person = authService.getAuthenticatedPerson();
         Person updatedPerson = personService.topUpBalance(person, topUpBalanceRequest.amount());
@@ -94,7 +95,7 @@ public class ApiPersonController {
     public PersonResponse block(@PathVariable("personId") Long personId){
         Person person = personService.getById(personId);
         if(PersonAccountStatus.BLOCKED.equals(person.getAccountStatus())){
-            throw new RuntimeException("Указанный пользователь заблокирован");
+            throw new BadRequestException("Указанный пользователь заблокирован");
         }
         Person updatedPerson = personService.block(person);
         return personMapper.mapToPersonResponse(updatedPerson);
@@ -106,7 +107,7 @@ public class ApiPersonController {
     public PersonResponse unblock(@PathVariable("personId") Long personId){
         Person person = personService.getById(personId);
         if(PersonAccountStatus.ACTIVE.equals(person.getAccountStatus())){
-            throw new RuntimeException("Указанный пользователь не заблокирован");
+            throw new BadRequestException("Указанный пользователь не заблокирован");
         }
         Person updatedPerson = personService.unblock(person);
         return personMapper.mapToPersonResponse(updatedPerson);

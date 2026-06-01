@@ -69,6 +69,15 @@ public class ApiHallController {
         return hallMapper.mapToHallResponse(hall);
     }
 
+    @Operation(description = "Редактирование зала")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{hallId}")
+    public HallResponse update(@PathVariable("hallId") Long hallId, @RequestBody HallRequest hallRequest){
+        Hall hall = hallService.getById(hallId);
+        Hall updatedHall = hallService.update(hallRequest, hall);
+        return hallMapper.mapToHallResponse(updatedHall);
+    }
+
     @Operation(description = "Удаление зала")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{hallId}")

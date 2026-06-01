@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.*;
 import ru.project.myCinema.repository.HallRepository;
 import ru.project.myCinema.repository.SeatRepository;
@@ -46,7 +47,7 @@ class SeatServiceImplTest {
      */
     @Test
     void testGetByIdFailure() {
-        Assertions.assertThrows(RuntimeException.class, () -> seatService.getById(999L));
+        Assertions.assertThrows(NotFoundException.class, () -> seatService.getById(999L));
     }
 
     /**

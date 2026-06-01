@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.hall.HallRequest;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.repository.HallRepository;
 import ru.project.myCinema.service.HallService;
@@ -50,7 +51,7 @@ public class HallServiceImpl implements HallService {
     @Override
     public Hall getById(Long id) {
         return hallRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Зал с id=%s не найден".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("Зал с id=%s не найден".formatted(id)));
     }
 
     @Transactional(readOnly = true)
