@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.booking.BookingCreateRequest;
-import ru.project.myCinema.dto.seat.SeatShortResponse;
+import ru.project.myCinema.dto.seat.SeatIdResponse;
 import ru.project.myCinema.mapper.SeatMapper;
 import ru.project.myCinema.model.Booking;
 import ru.project.myCinema.model.Person;
@@ -54,9 +54,9 @@ public class BookingController {
     public String createPage(@RequestParam Long sessionId, Model model) {
         Session session = sessionService.getById(sessionId);
         List<Seat> availableSeats = seatService.getAvailableSeatsBySession(session);
-        List<SeatShortResponse> seatShortResponses = seatMapper.mapToSeatShortResponses(availableSeats);
+        List<SeatIdResponse> seatIdResponses = seatMapper.mapToSeatIdResponses(availableSeats);
         model.addAttribute("sessionId", sessionId);
-        model.addAttribute("availableSeats", seatShortResponses);
+        model.addAttribute("availableSeats", seatIdResponses);
 
         return "bookings/create";
     }

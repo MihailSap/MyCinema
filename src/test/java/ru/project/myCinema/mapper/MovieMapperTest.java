@@ -15,14 +15,11 @@ import java.util.List;
  */
 class MovieMapperTest {
 
-    private MovieMapper movieMapper;
-
+    private final MovieMapper movieMapper = new MovieMapper();
     private Movie movie;
 
     @BeforeEach
     void setUp() {
-        movieMapper = new MovieMapper();
-
         movie = new Movie();
         movie.setId(1L);
         movie.setTitle("movie");
@@ -52,21 +49,26 @@ class MovieMapperTest {
         Movie secondMovie = new Movie();
         secondMovie.setId(2L);
         secondMovie.setTitle("movie2");
-        secondMovie.setAgeRating(MovieAgeRating.G);
+        secondMovie.setAgeRating(MovieAgeRating.PG);
         secondMovie.setMinutesLength(192);
 
         List<MovieResponse> responses = movieMapper.mapToMovieResponses(List.of(movie, secondMovie));
 
         Assertions.assertEquals(2, responses.size());
-        Assertions.assertEquals(1L, responses.get(0).id());
-        Assertions.assertEquals("movie", responses.get(0).title());
-        Assertions.assertEquals(MovieAgeRating.G, responses.get(0).ageRating());
-        Assertions.assertEquals(169, responses.get(0).minutesLength());
 
-        Assertions.assertEquals(2L, responses.get(1).id());
-        Assertions.assertEquals("movie2", responses.get(1).title());
-        Assertions.assertEquals(MovieAgeRating.G, responses.get(1).ageRating());
-        Assertions.assertEquals(192, responses.get(1).minutesLength());
+        MovieResponse firstMovieResponse = responses.getFirst();
+        Assertions.assertNotNull(firstMovieResponse);
+        Assertions.assertEquals(1L, firstMovieResponse.id());
+        Assertions.assertEquals("movie", firstMovieResponse.title());
+        Assertions.assertEquals(MovieAgeRating.G, firstMovieResponse.ageRating());
+        Assertions.assertEquals(169, firstMovieResponse.minutesLength());
+
+        MovieResponse secondMovieResponse = responses.get(1);
+        Assertions.assertNotNull(secondMovieResponse);
+        Assertions.assertEquals(2L, secondMovieResponse.id());
+        Assertions.assertEquals("movie2", secondMovieResponse.title());
+        Assertions.assertEquals(MovieAgeRating.PG, secondMovieResponse.ageRating());
+        Assertions.assertEquals(192, secondMovieResponse.minutesLength());
     }
 
     /**
