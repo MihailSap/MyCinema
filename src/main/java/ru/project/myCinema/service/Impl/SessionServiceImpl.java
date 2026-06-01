@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.session.SessionRequest;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.model.Movie;
 import ru.project.myCinema.model.Session;
@@ -30,7 +31,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public Session getById(Long id) {
         return sessionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Сеанс с id=%s не найден".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("Сеанс с id=%s не найден".formatted(id)));
     }
 
     @Transactional(readOnly = true)

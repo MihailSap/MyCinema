@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.hall.HallRequest;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Hall;
 import ru.project.myCinema.model.Seat;
 import ru.project.myCinema.repository.HallRepository;
@@ -68,7 +69,7 @@ class HallServiceImplTest {
      */
     @Test
     void testGetByIdFailure() {
-        Assertions.assertThrows(RuntimeException.class, () -> hallService.getById(999L));
+        Assertions.assertThrows(NotFoundException.class, () -> hallService.getById(999L));
     }
 
     /**

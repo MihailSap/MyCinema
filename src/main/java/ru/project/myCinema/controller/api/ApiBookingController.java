@@ -2,10 +2,13 @@ package ru.project.myCinema.controller.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.project.myCinema.dto.booking.BookingCreateRequest;
 import ru.project.myCinema.dto.booking.BookingResponse;
+import ru.project.myCinema.exception.BadRequestException;
+import ru.project.myCinema.exception.ConflictException;
 import ru.project.myCinema.mapper.BookingMapper;
 import ru.project.myCinema.model.*;
 import ru.project.myCinema.service.*;
@@ -51,18 +54,18 @@ public class ApiBookingController {
 
     @Operation(description = "Создание заказа")
     @PostMapping
-    public BookingResponse create(@RequestBody BookingCreateRequest bookingCreateRequest){
+    public BookingResponse create(@Valid @RequestBody BookingCreateRequest bookingCreateRequest){
         Person person = authService.getAuthenticatedPerson();
         Session session = sessionService.getById(bookingCreateRequest.sessionId());
         Seat seat = seatService.getById(bookingCreateRequest.seatId());
         if(session.getStartDateTime().isBefore(LocalDateTime.now())){
-            throw new RuntimeException("Нельзя забронировать место на прошедший сеанс");
+            throw new BadRequestException("Нельзя забронировать место на прошедший сеанс");
         }
         if(!seat.getHall().getId().equals(session.getHall().getId())){
-            throw new RuntimeException("Место не принадлежит залу данного сеанса");
+            throw new BadRequestException("Место не принадлежит залу данного сеанса");
         }
         if(seatService.isSeatBooked(seat, session)){
-            throw new RuntimeException("Место занято");
+            throw new ConflictException("Место занято");
         }
 
         Booking booking = bookingService.create(person, session, seat);

@@ -10,6 +10,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.person.AuthRequest;
 import ru.project.myCinema.dto.person.UpdatePersonRequest;
+import ru.project.myCinema.exception.ConflictException;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Person;
 import ru.project.myCinema.model.PersonAccountStatus;
 import ru.project.myCinema.model.Role;
@@ -78,7 +80,7 @@ class PersonServiceImplTest {
      */
     @Test
     void testGetByIdFailure() {
-        Assertions.assertThrows(RuntimeException.class, () -> personService.getById(999L));
+        Assertions.assertThrows(NotFoundException.class, () -> personService.getById(999L));
     }
 
     /**
@@ -96,7 +98,7 @@ class PersonServiceImplTest {
      */
     @Test
     void testGetByLoginFailure() {
-        Assertions.assertThrows(RuntimeException.class, () -> personService.getByLogin("userUnknown"));
+        Assertions.assertThrows(NotFoundException.class, () -> personService.getByLogin("userUnknown"));
     }
 
     /**
@@ -134,7 +136,7 @@ class PersonServiceImplTest {
         Person conflictPerson = personService.create(new AuthRequest("user2006", "123456789"));
         UpdatePersonRequest request = new UpdatePersonRequest("user2005", null, null);
 
-        Assertions.assertThrows(RuntimeException.class, () -> personService.update(request, conflictPerson));
+        Assertions.assertThrows(ConflictException.class, () -> personService.update(request, conflictPerson));
     }
 
     /**

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.project.myCinema.dto.movie.MovieRequest;
+import ru.project.myCinema.exception.NotFoundException;
 import ru.project.myCinema.model.Movie;
 import ru.project.myCinema.model.MovieAgeRating;
 import ru.project.myCinema.repository.MovieRepository;
@@ -38,7 +39,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie getById(Long id) {
         return movieRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Фильм с id=%s не найден".formatted(id)));
+                .orElseThrow(() -> new NotFoundException("Фильм с id=%s не найден".formatted(id)));
     }
 
     @Transactional(readOnly = true)
